@@ -1,0 +1,24 @@
+# Ignore agent configs & internal workspace data
+.agents/
+scratch/
+skills-lock.json
+
+# Ignore raw/temp directories
+extracted_assets/
+fondos-landing codex/
+fotos-amanda-generadas/
+fotos-amanda-referencia/
+
+# Ignore raw camera/screenshot assets in root
+*.jpeg
+*.jpg
+*.JPG
+*.png
+!logo.png
+
+# Ignore video outputs
+*.mp4
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

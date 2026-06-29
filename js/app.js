@@ -408,10 +408,14 @@ function initVideoTestimonials() {
 function initHeroVsl() {
   const player = document.querySelector("[data-vsl-player]");
   const video = player?.querySelector("[data-vsl-video]");
-  const playButton = player?.querySelector("[data-vsl-play]");
-  const heroSection = player?.closest(".hero-section");
+  const toggleButton = player?.querySelector("[data-vsl-toggle]");
+  const soundButton = player?.querySelector("[data-vsl-sound]");
+  const playIcon = toggleButton?.querySelector("[data-vsl-icon='play']");
+  const pauseIcon = toggleButton?.querySelector("[data-vsl-icon='pause']");
+  const mutedIcon = soundButton?.querySelector("[data-vsl-icon='muted']");
+  const soundIcon = soundButton?.querySelector("[data-vsl-icon='sound']");
 
-  if (!player || !video || !playButton) return;
+  if (!player || !video || !toggleButton || !soundButton) return;
 
   const sources = {
     intro: video.dataset.introSrc,
@@ -422,12 +426,26 @@ function initHeroVsl() {
   if (!sources.intro || !sources.vsl || !sources.outro) return;
 
   const preloaders = new Map();
-  let phase = "intro-preview";
+  let phase = "intro";
   let switching = false;
+  let pausedByVisibility = false;
+  let userMuted = true;
 
   const setState = state => {
     player.dataset.vslState = state;
     player.classList.toggle("is-playing", state === "playing");
+    const isPlaying = state === "playing";
+
+    if (playIcon) playIcon.hidden = isPlaying;
+    if (pauseIcon) pauseIcon.hidden = !isPlaying;
+    toggleButton.setAttribute(
+      "aria-label",
+      isPlaying
+        ? "Pausar video"
+        : phase === "complete"
+          ? "Reproducir secuencia desde el inicio"
+          : "Reproducir video"
+    );
   };
 
   const setPhase = nextPhase => {
@@ -435,9 +453,12 @@ function initHeroVsl() {
     player.dataset.vslPhase = nextPhase;
   };
 
-  const setStarted = started => {
-    player.classList.toggle("is-vsl-started", started);
-    heroSection?.classList.toggle("is-vsl-started", started);
+  const updateSoundControl = () => {
+    const hasSound = !video.muted;
+    if (mutedIcon) mutedIcon.hidden = hasSound;
+    if (soundIcon) soundIcon.hidden = !hasSound;
+    soundButton.setAttribute("aria-pressed", String(hasSound));
+    soundButton.setAttribute("aria-label", hasSound ? "Silenciar video" : "Activar sonido");
   };
 
   const preloadVideo = src => {
@@ -473,26 +494,30 @@ function initHeroVsl() {
     video.addEventListener("error", finish, { once: true });
   });
 
-  const enableNativeFallback = error => {
-    console.warn("No se pudo continuar la secuencia del VSL:", error);
+  const enableAutoplayFallback = error => {
+    if (error?.name !== "NotAllowedError") {
+      console.warn("No se pudo continuar la secuencia del VSL:", error);
+    }
     switching = false;
     player.classList.remove("is-switching");
-    player.classList.add("is-native-fallback");
-    video.controls = true;
-    video.focus({ preventScroll: true });
+    player.classList.add("is-autoplay-blocked");
+    toggleButton.disabled = false;
+    video.controls = false;
     setState("paused");
   };
 
   const playSegment = async nextPhase => {
     switching = true;
     setPhase(nextPhase);
+    setState("loading");
     player.classList.add("is-switching");
-    player.classList.remove("is-native-fallback", "is-complete");
+    player.classList.remove("is-autoplay-blocked", "is-complete");
+    toggleButton.disabled = true;
 
     video.pause();
     video.loop = false;
-    video.muted = false;
-    video.controls = nextPhase === "vsl";
+    video.muted = userMuted;
+    video.controls = false;
     video.src = sources[nextPhase];
     video.load();
 
@@ -501,54 +526,59 @@ function initHeroVsl() {
     await waitUntilReady();
     player.classList.remove("is-switching");
     switching = false;
+    toggleButton.disabled = false;
 
     try {
       await video.play();
     } catch (error) {
-      enableNativeFallback(error);
+      enableAutoplayFallback(error);
     }
   };
 
   video.defaultMuted = true;
   video.muted = true;
-  video.loop = true;
+  video.loop = false;
   video.controls = false;
-  setPhase("intro-preview");
+  setPhase("intro");
   setState("initial");
-  setStarted(false);
+  updateSoundControl();
   preloadVideo(sources.vsl);
 
-  video.play().catch(() => {
-    setState("initial");
-  });
+  video.play().catch(enableAutoplayFallback);
 
-  playButton.addEventListener("click", async () => {
-    if (phase !== "intro-preview") return;
+  toggleButton.addEventListener("click", async () => {
+    if (switching) return;
 
-    player.classList.remove("is-native-fallback");
-    setStarted(true);
-    setPhase("intro");
-    setState("playing");
-    video.loop = false;
-    video.muted = false;
-    video.controls = false;
-    video.currentTime = 0;
+    if (phase === "complete") {
+      await playSegment("intro");
+      return;
+    }
 
-    try {
-      await video.play();
-    } catch (error) {
-      enableNativeFallback(error);
+    if (video.paused) {
+      player.classList.remove("is-autoplay-blocked");
+      try {
+        await video.play();
+      } catch (error) {
+        enableAutoplayFallback(error);
+      }
+    } else {
+      video.pause();
     }
   });
 
+  soundButton.addEventListener("click", () => {
+    userMuted = !video.muted;
+    video.muted = userMuted;
+    updateSoundControl();
+  });
+
   video.addEventListener("play", () => {
-    player.classList.remove("is-native-fallback");
-    if (phase !== "intro-preview") setStarted(true);
+    player.classList.remove("is-autoplay-blocked");
     setState("playing");
   });
 
   video.addEventListener("pause", () => {
-    if (!video.ended && !switching && phase !== "intro-preview") {
+    if (!video.ended && !switching) {
       setState("paused");
     }
   });
@@ -573,7 +603,27 @@ function initHeroVsl() {
   });
 
   video.addEventListener("error", () => {
-    if (!switching) enableNativeFallback(video.error);
+    if (!switching) enableAutoplayFallback(video.error);
+  });
+
+  document.addEventListener("visibilitychange", async () => {
+    if (document.hidden) {
+      pausedByVisibility = !video.paused && phase !== "complete";
+      if (pausedByVisibility) video.pause();
+      return;
+    }
+
+    if (pausedByVisibility && phase !== "complete") {
+      pausedByVisibility = false;
+      userMuted = true;
+      video.muted = true;
+      updateSoundControl();
+      try {
+        await video.play();
+      } catch (error) {
+        enableAutoplayFallback(error);
+      }
+    }
   });
 }
 

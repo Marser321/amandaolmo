@@ -598,66 +598,69 @@ a {
   opacity: 0;
 }
 
-.hero-vsl-play {
+.hero-vsl-controls {
   position: absolute;
   z-index: 4;
-  left: 50%;
+  left: 0.85rem;
   top: 50%;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  min-width: 118px;
-  padding: 0.85rem 1.1rem;
+  gap: 0.5rem;
+  transform: translateY(-50%);
+}
+
+.hero-vsl-control {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   border: 1px solid rgba(245, 230, 200, 0.36);
-  border-radius: 999px;
-  background: rgba(4, 10, 20, 0.78);
+  border-radius: 50%;
+  background: rgba(4, 10, 20, 0.72);
   color: #fff;
-  font-family: var(--font-headings);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 0 28px rgba(216, 184, 115, 0.14);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.hero-vsl-play:hover {
+.hero-vsl-control:hover {
   border-color: var(--color-gold-bright);
-  transform: translate(-50%, -50%) scale(1.04);
+  background: rgba(4, 10, 20, 0.88);
+  transform: scale(1.06);
 }
 
-.hero-vsl-play:focus-visible {
+.hero-vsl-control:focus-visible {
   outline: 2px solid var(--color-cyan-neon);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
-.hero-vsl-play-icon {
+.hero-vsl-control span {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-gold-bright), var(--color-champagne));
-  color: #08111e;
-  box-shadow: 0 0 24px rgba(216, 184, 115, 0.32);
 }
 
-.hero-vsl-play-icon svg {
-  width: 24px;
-  height: 24px;
-  margin-left: 3px;
+.hero-vsl-control [hidden] {
+  display: none;
 }
 
-.hero-vsl-card.is-vsl-started .hero-vsl-play,
-.hero-vsl-card.is-native-fallback .hero-vsl-play {
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.94);
+.hero-vsl-control:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+}
+
+.hero-vsl-control svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-vsl-card.is-autoplay-blocked [data-vsl-sound] {
+  display: none;
 }
 
 .hero-form-card {
@@ -1091,17 +1094,10 @@ a {
 
 .video-testimonials-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(390px, 0.95fr);
-  align-items: stretch;
-  gap: 1.4rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 1.2rem;
   margin-top: 3rem;
-}
-
-.video-portrait-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  min-width: 0;
 }
 
 .video-testimonial-card {
@@ -1204,10 +1200,6 @@ a {
   background: #020711;
 }
 
-.video-media-stage-featured {
-  aspect-ratio: 16 / 9;
-}
-
 .video-media-stage-portrait {
   aspect-ratio: 9 / 16;
 }
@@ -1241,13 +1233,8 @@ a {
   height: 100%;
   min-width: 0;
   min-height: 0;
-  object-fit: contain;
+  object-fit: cover;
   background: rgba(2, 7, 17, 0.36);
-}
-
-.video-media-stage-featured video {
-  width: 100%;
-  background: rgba(2, 7, 17, 0.52);
 }
 
 .testimonial-fineprint {
@@ -1676,26 +1663,17 @@ section::after {
     box-shadow: 0 0 54px rgba(0, 0, 0, 0.5);
   }
 
-  .hero-vsl-play {
-    top: 50%;
-    width: 76px;
-    min-width: 76px;
-    height: 76px;
-    padding: 0;
-    gap: 0;
-    border-radius: 50%;
+  .hero-vsl-controls {
+    left: max(0.85rem, env(safe-area-inset-left));
+    top: auto;
+    bottom: calc(6.4rem + env(safe-area-inset-bottom));
+    flex-direction: row;
+    transform: none;
   }
 
-  .hero-vsl-play > span:last-child {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .hero-vsl-control {
+    width: 40px;
+    height: 40px;
   }
 
   .hero-content {
@@ -1743,10 +1721,6 @@ section::after {
   }
 
   .video-testimonials-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .video-portrait-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1797,17 +1771,9 @@ section::after {
   }
 
   .video-testimonials-layout {
+    display: flex;
     gap: 1.1rem;
     margin-top: 2rem;
-  }
-
-  .video-media-stage-featured {
-    aspect-ratio: 4 / 5;
-  }
-
-  .video-portrait-grid {
-    display: flex;
-    gap: 0.9rem;
     margin-inline: -1.5rem;
     padding: 0 1.5rem 0.75rem;
     overflow-x: auto;
@@ -1817,7 +1783,7 @@ section::after {
     scrollbar-color: rgba(216, 184, 115, 0.35) transparent;
   }
 
-  .video-portrait-grid .video-testimonial-card {
+  .video-testimonials-layout .video-testimonial-card {
     flex: 0 0 min(78vw, 320px);
     scroll-snap-align: center;
   }

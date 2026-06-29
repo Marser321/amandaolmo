@@ -81,7 +81,6 @@
             src="1.mp4"
             autoplay
             muted
-            loop
             playsinline
             preload="auto"
             poster="videos/vsl-sequence-poster.webp"
@@ -90,14 +89,37 @@
             Tu navegador no puede reproducir este video.
           </video>
 
-          <button class="hero-vsl-play" type="button" data-vsl-play aria-controls="hero-vsl-video" aria-label="Reproducir video de Amanda Olmo">
-            <span class="hero-vsl-play-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5.5v13l10-6.5z"></path>
-              </svg>
-            </span>
-            <span>Reproducir masterclass</span>
-          </button>
+          <div class="hero-vsl-controls" role="group" aria-label="Controles del video">
+            <button class="hero-vsl-control" type="button" data-vsl-toggle aria-controls="hero-vsl-video" aria-label="Pausar video">
+              <span data-vsl-icon="play" hidden aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5.5v13l10-6.5z"></path>
+                </svg>
+              </span>
+              <span data-vsl-icon="pause" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zm6 0h4v14h-4z"></path>
+                </svg>
+              </span>
+            </button>
+
+            <button class="hero-vsl-control" type="button" data-vsl-sound aria-controls="hero-vsl-video" aria-label="Activar sonido" aria-pressed="false">
+              <span data-vsl-icon="muted" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 5 6 9H2v6h4l5 4z"></path>
+                  <path d="m19 9-6 6"></path>
+                  <path d="m13 9 6 6"></path>
+                </svg>
+              </span>
+              <span data-vsl-icon="sound" hidden aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 5 6 9H2v6h4l5 4z"></path>
+                  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+                  <path d="M18 6a8.5 8.5 0 0 1 0 12"></path>
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
 
         <!-- Botón de Registro Directo en Móvil (hace scroll al formulario inline de abajo) -->
@@ -336,7 +358,7 @@
       </div>
 
       <div class="video-testimonials-layout">
-        <article class="video-testimonial-card video-testimonial-featured shell" data-reveal>
+        <article class="video-testimonial-card shell" data-reveal>
           <div class="video-testimonial-core core">
             <div class="video-card-meta">
               <span class="video-real-chip"><span aria-hidden="true"></span>Testimonio real</span>
@@ -345,8 +367,8 @@
                 <span class="video-meta-chip">Vertical</span>
               </div>
             </div>
-            <div class="video-media-stage video-media-stage-featured" style="--video-poster: url('../videos-testimonios/testimonio-horizontal.webp');">
-              <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-horizontal.webp" aria-label="Reproducir testimonio real destacado">
+            <div class="video-media-stage video-media-stage-portrait" style="--video-poster: url('../videos-testimonios/testimonio-horizontal.webp');">
+              <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-horizontal.webp" aria-label="Reproducir testimonio real, duración 15 segundos">
                 <source src="videos-testimonios/testimonio-horizontal.mp4" type="video/mp4">
                 Tu navegador no puede reproducir este video.
               </video>
@@ -354,43 +376,41 @@
           </div>
         </article>
 
-        <div class="video-portrait-grid" aria-label="Más testimonios en video">
-          <article class="video-testimonial-card shell" data-reveal>
-            <div class="video-testimonial-core core">
-              <div class="video-card-meta">
-                <span class="video-real-chip"><span aria-hidden="true"></span>Testimonio real</span>
-                <div class="video-meta-chips" aria-label="Datos del video">
-                  <span class="video-meta-chip">0:25</span>
-                  <span class="video-meta-chip">Vertical</span>
-                </div>
-              </div>
-              <div class="video-media-stage video-media-stage-portrait" style="--video-poster: url('../videos-testimonios/testimonio-vertical-1.webp');">
-                <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-vertical-1.webp" aria-label="Reproducir testimonio real, duración 25 segundos">
-                  <source src="videos-testimonios/testimonio-vertical-1.mp4" type="video/mp4">
-                  Tu navegador no puede reproducir este video.
-                </video>
+        <article class="video-testimonial-card shell" data-reveal>
+          <div class="video-testimonial-core core">
+            <div class="video-card-meta">
+              <span class="video-real-chip"><span aria-hidden="true"></span>Testimonio real</span>
+              <div class="video-meta-chips" aria-label="Datos del video">
+                <span class="video-meta-chip">0:25</span>
+                <span class="video-meta-chip">Vertical</span>
               </div>
             </div>
-          </article>
+            <div class="video-media-stage video-media-stage-portrait" style="--video-poster: url('../videos-testimonios/testimonio-vertical-1.webp');">
+              <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-vertical-1.webp" aria-label="Reproducir testimonio real, duración 25 segundos">
+                <source src="videos-testimonios/testimonio-vertical-1.mp4" type="video/mp4">
+                Tu navegador no puede reproducir este video.
+              </video>
+            </div>
+          </div>
+        </article>
 
-          <article class="video-testimonial-card shell" data-reveal>
-            <div class="video-testimonial-core core">
-              <div class="video-card-meta">
-                <span class="video-real-chip"><span aria-hidden="true"></span>Testimonio real</span>
-                <div class="video-meta-chips" aria-label="Datos del video">
-                  <span class="video-meta-chip">1:04</span>
-                  <span class="video-meta-chip">Vertical</span>
-                </div>
-              </div>
-              <div class="video-media-stage video-media-stage-portrait" style="--video-poster: url('../videos-testimonios/testimonio-vertical-2.webp');">
-                <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-vertical-2.webp" aria-label="Reproducir testimonio real, duración 1 minuto y 4 segundos">
-                  <source src="videos-testimonios/testimonio-vertical-2.mp4" type="video/mp4">
-                  Tu navegador no puede reproducir este video.
-                </video>
+        <article class="video-testimonial-card shell" data-reveal>
+          <div class="video-testimonial-core core">
+            <div class="video-card-meta">
+              <span class="video-real-chip"><span aria-hidden="true"></span>Testimonio real</span>
+              <div class="video-meta-chips" aria-label="Datos del video">
+                <span class="video-meta-chip">1:04</span>
+                <span class="video-meta-chip">Vertical</span>
               </div>
             </div>
-          </article>
-        </div>
+            <div class="video-media-stage video-media-stage-portrait" style="--video-poster: url('../videos-testimonios/testimonio-vertical-2.webp');">
+              <video data-testimonial-video controls playsinline preload="none" poster="videos-testimonios/testimonio-vertical-2.webp" aria-label="Reproducir testimonio real, duración 1 minuto y 4 segundos">
+                <source src="videos-testimonios/testimonio-vertical-2.mp4" type="video/mp4">
+                Tu navegador no puede reproducir este video.
+              </video>
+            </div>
+          </div>
+        </article>
       </div>
 
       <p class="testimonial-fineprint" data-reveal>

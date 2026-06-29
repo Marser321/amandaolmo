@@ -5,10 +5,9 @@
 // 1. Configuración de Variables del Evento
 const CONFIG = {
   // Configura aquí la fecha de la Masterclass (Año, Mes (0-11), Día, Hora, Minutos)
-  // Ejemplo: 2 de Julio de 2026, 8:00 PM EST (20:00)
   eventDate: new Date(2026, 6, 2, 20, 0, 0), 
   
-  // Endpoint de integración (reemplazar por tu webhook de GoHighLevel / Zapier)
+  // Endpoint de integración (webhook de GoHighLevel / Zapier)
   webhookUrl: "https://services.leadconnectorhq.com/hooks/.../YOUR_WEBHOOK_ID",
   
   // Habilitar simulación local de base de datos
@@ -23,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initFaqAccordion();
   initScrollReveal();
   initModalHandler();
+  initScrollToForm();
+  initVideoTestimonials();
+  initHeroVsl();
 });
 
 // 2. Cuenta Regresiva (Countdown Timer)
@@ -44,6 +46,11 @@ function initCountdown() {
       timerHours.forEach(el => el.textContent = "00");
       timerMinutes.forEach(el => el.textContent = "00");
       timerSeconds.forEach(el => el.textContent = "00");
+      
+      const countdownBoxDesc = document.querySelector(".countdown-desc");
+      if (countdownBoxDesc) {
+        countdownBoxDesc.textContent = "¡La clase está por comenzar! Únete al grupo de WhatsApp VIP para recibir el enlace directo.";
+      }
       clearInterval(timerInterval);
       return;
     }
@@ -53,7 +60,6 @@ function initCountdown() {
     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-    // Formatear a dos dígitos (ej. 05 en lugar de 5)
     const format = num => String(num).padStart(2, "0");
 
     timerDays.forEach(el => el.textContent = format(days));
@@ -62,7 +68,6 @@ function initCountdown() {
     timerSeconds.forEach(el => el.textContent = format(seconds));
   }
 
-  // Ejecutar inmediatamente y programar intervalo cada segundo
   updateTimer();
   const timerInterval = setInterval(updateTimer, 1000);
 }
@@ -75,7 +80,6 @@ function initStickyCTA() {
   if (!stickyBar || !heroSection) return;
 
   window.addEventListener("scroll", () => {
-    // Si la pantalla es móvil y el usuario pasó la sección hero, muestra la barra flotante
     if (window.innerWidth <= 768) {
       const heroBottom = heroSection.getBoundingClientRect().bottom;
       if (heroBottom < 0) {
@@ -92,65 +96,157 @@ function initStickyCTA() {
   });
 }
 
-// 4. Validación de Formulario y Envío
+// Helper para obtener o crear span de error
+function getOrCreateErrorSpan(input) {
+  let errorSpan = input.parentNode.querySelector(".error-msg");
+  if (!errorSpan) {
+    errorSpan = document.createElement("span");
+    errorSpan.className = "error-msg";
+    errorSpan.style.color = "var(--color-red-danger)";
+    errorSpan.style.fontSize = "0.75rem";
+    errorSpan.style.display = "none";
+    errorSpan.style.marginTop = "0.25rem";
+    errorSpan.style.textAlign = "left";
+    errorSpan.style.width = "100%";
+    input.parentNode.appendChild(errorSpan);
+  }
+  return errorSpan;
+}
+
+// Validar formato de email
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Lógica de Validación en Vivo
+function setupLiveValidation(form) {
+  const nameInput = form.querySelector("[name='name']");
+  const emailInput = form.querySelector("[name='email']");
+  const phoneInput = form.querySelector("[name='phone']");
+  const tcpaCheckbox = form.querySelector("[name='tcpa_consent']");
+  const submitBtn = form.querySelector("button[type='submit']");
+
+  if (!nameInput || !emailInput || !phoneInput || !tcpaCheckbox || !submitBtn) return;
+
+  const touched = { name: false, email: false, phone: false };
+
+  function checkFormValidity() {
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+    const phoneVal = phoneInput.value.replace(/\D/g, "");
+    const tcpaChecked = tcpaCheckbox.checked;
+
+    const isNameValid = nameVal.length > 0;
+    const isEmailValid = validateEmail(emailVal);
+    const isPhoneValid = phoneVal.length >= 10;
+
+    if (touched.name) {
+      const errorSpan = getOrCreateErrorSpan(nameInput);
+      errorSpan.textContent = isNameValid ? "" : "El nombre completo es requerido.";
+      errorSpan.style.display = isNameValid ? "none" : "block";
+    }
+    if (touched.email) {
+      const errorSpan = getOrCreateErrorSpan(emailInput);
+      if (!emailVal) {
+        errorSpan.textContent = "El correo electrónico es requerido.";
+        errorSpan.style.display = "block";
+      } else if (!isEmailValid) {
+        errorSpan.textContent = "Introduce un correo válido (ej. usuario@correo.com).";
+        errorSpan.style.display = "block";
+      } else {
+        errorSpan.textContent = "";
+        errorSpan.style.display = "none";
+      }
+    }
+    if (touched.phone) {
+      const errorSpan = getOrCreateErrorSpan(phoneInput);
+      if (!phoneVal) {
+        errorSpan.textContent = "El número telefónico es requerido.";
+        errorSpan.style.display = "block";
+      } else if (!isPhoneValid) {
+        errorSpan.textContent = "Introduce tu teléfono a 10 dígitos.";
+        errorSpan.style.display = "block";
+      } else {
+        errorSpan.textContent = "";
+        errorSpan.style.display = "none";
+      }
+    }
+
+    const isValid = isNameValid && isEmailValid && isPhoneValid && tcpaChecked;
+    submitBtn.disabled = !isValid;
+  }
+
+  nameInput.addEventListener("input", () => {
+    touched.name = true;
+    checkFormValidity();
+  });
+  nameInput.addEventListener("blur", () => {
+    touched.name = true;
+    checkFormValidity();
+  });
+
+  emailInput.addEventListener("input", () => {
+    touched.email = true;
+    checkFormValidity();
+  });
+  emailInput.addEventListener("blur", () => {
+    touched.email = true;
+    checkFormValidity();
+  });
+
+  phoneInput.addEventListener("input", () => {
+    touched.phone = true;
+    checkFormValidity();
+  });
+  phoneInput.addEventListener("blur", () => {
+    touched.phone = true;
+    checkFormValidity();
+  });
+
+  tcpaCheckbox.addEventListener("change", () => {
+    checkFormValidity();
+  });
+
+  // Ejecución inicial por si el navegador autocompleta
+  setTimeout(checkFormValidity, 500);
+}
+
+// 4. Envío de Formulario
 function initFormHandler() {
   const forms = document.querySelectorAll(".registration-form");
 
   forms.forEach(form => {
+    setupLiveValidation(form);
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       
       const submitBtn = form.querySelector("button[type='submit']");
       const originalBtnText = submitBtn.innerHTML;
       
-      // Obtener campos
       const nameInput = form.querySelector("[name='name']");
       const emailInput = form.querySelector("[name='email']");
       const phoneInput = form.querySelector("[name='phone']");
       const tcpaCheckbox = form.querySelector("[name='tcpa_consent']");
 
-      // Validaciones básicas
-      if (!nameInput.value.trim()) {
-        alert("Por favor, introduce tu nombre.");
-        nameInput.focus();
-        return;
-      }
-
-      if (!validateEmail(emailInput.value.trim())) {
-        alert("Por favor, introduce un correo electrónico válido.");
-        emailInput.focus();
-        return;
-      }
-
-      // Quitar caracteres no numéricos para validación de teléfono (mínimo 10 dígitos)
       const cleanedPhone = phoneInput.value.replace(/\D/g, "");
-      if (cleanedPhone.length < 10) {
-        alert("Por favor, introduce un número de teléfono de 10 dígitos válido.");
-        phoneInput.focus();
-        return;
-      }
 
-      if (!tcpaCheckbox.checked) {
-        alert("Debes marcar la casilla para autorizar los recordatorios de la Masterclass vía SMS/WhatsApp.");
-        tcpaCheckbox.focus();
-        return;
-      }
-
-      // Cambiar estado a "Enviando"
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
-        <svg class="animate-spin" style="width: 20px; height: 20px; color: black;" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
-          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Registrando lugar...
+        <span class="btn-icon-wrapper animate-spin" style="margin: 0 auto; display: inline-block;">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+        <span>Procesando...</span>
       `;
 
-      // Payload de datos
       const payload = {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
-        phone: "+1" + cleanedPhone, // Prefijo de EE.UU. preseleccionado
+        phone: "+1" + cleanedPhone,
         tcpa_consent: tcpaCheckbox.checked,
         registeredAt: new Date().toISOString(),
         source: "Landing Page Masterclass",
@@ -159,17 +255,11 @@ function initFormHandler() {
 
       try {
         if (CONFIG.simulateLocalSubmit) {
-          // Simulación de envío con retraso para UX limpia
           await new Promise(resolve => setTimeout(resolve, 1500));
           console.log("Submit Simulado Exitoso:", payload);
-          
-          // Guardar en localStorage para usar el nombre en la página de agradecimiento
           localStorage.setItem("mandy_lead_name", payload.name);
-          
-          // Redirigir a gracias.html
           window.location.href = "gracias.html";
         } else {
-          // Envío real a Webhook / API
           const response = await fetch(CONFIG.webhookUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -193,11 +283,6 @@ function initFormHandler() {
   });
 }
 
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
 // 5. FAQ Accordion
 function initFaqAccordion() {
   const accordionHeaders = document.querySelectorAll(".accordion-header");
@@ -208,7 +293,6 @@ function initFaqAccordion() {
       const content = header.nextElementSibling;
       const isActive = item.classList.contains("active");
 
-      // Cerrar otros abiertos para efecto limpio
       document.querySelectorAll(".accordion-item").forEach(otherItem => {
         if (otherItem !== item && otherItem.classList.contains("active")) {
           otherItem.classList.remove("active");
@@ -216,7 +300,6 @@ function initFaqAccordion() {
         }
       });
 
-      // Alternar el actual
       if (isActive) {
         item.classList.remove("active");
         content.style.maxHeight = null;
@@ -233,7 +316,6 @@ function initScrollReveal() {
   const revealElements = document.querySelectorAll("[data-reveal]");
   
   if (!("IntersectionObserver" in window)) {
-    // Fallback si no está soportado
     revealElements.forEach(el => el.classList.add("revealed"));
     return;
   }
@@ -242,7 +324,7 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("revealed");
-        observer.unobserve(entry.target); // Dejar de observar una vez revelado
+        observer.unobserve(entry.target);
       }
     });
   }, {
@@ -257,41 +339,22 @@ function initScrollReveal() {
 function initModalHandler() {
   const modal = document.getElementById("register-modal");
   const closeBtn = document.getElementById("close-modal");
-  const triggerBtns = document.querySelectorAll(".trigger-modal-btn");
 
   if (!modal || !closeBtn) return;
 
-  // Abrir Modal
-  triggerBtns.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.classList.add("active");
-      document.body.style.overflow = "hidden"; // Desactivar scroll del fondo
-      
-      // Enfocar el input de nombre
-      const nameInput = document.getElementById("modal-name");
-      if (nameInput) {
-        setTimeout(() => nameInput.focus(), 400);
-      }
-    });
-  });
-
-  // Cerrar Modal
   const closeModal = () => {
     modal.classList.remove("active");
-    document.body.style.overflow = ""; // Restaurar scroll del fondo
+    document.body.style.overflow = "";
   };
 
   closeBtn.addEventListener("click", closeModal);
 
-  // Cerrar haciendo clic fuera del modal
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
       closeModal();
     }
   });
 
-  // Cerrar con tecla Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.classList.contains("active")) {
       closeModal();
@@ -299,12 +362,227 @@ function initModalHandler() {
   });
 }
 
-// 8. Sistema de A/B Testing para Copywriting y Optimización de Conversión (CRO)
+// 8. Lógica de Scroll suave hacia el formulario inline
+function initScrollToForm() {
+  const scrollBtns = document.querySelectorAll(".scroll-to-form-btn");
+  const formCard = document.querySelector(".hero-form-card");
+  const firstInput = document.getElementById("hero-name");
+
+  scrollBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (firstInput) {
+          setTimeout(() => firstInput.focus(), 600);
+        }
+      }
+    });
+  });
+}
+
+// 9. Reproducción coordinada de testimonios en video
+function initVideoTestimonials() {
+  const videos = Array.from(document.querySelectorAll("[data-testimonial-video]"));
+
+  if (!videos.length) return;
+
+  videos.forEach(video => {
+    video.addEventListener("play", () => {
+      videos.forEach(otherVideo => {
+        if (otherVideo !== video && !otherVideo.paused) {
+          otherVideo.pause();
+        }
+      });
+    });
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      videos.forEach(video => video.pause());
+    }
+  });
+}
+
+// 10. VSL principal del hero
+function initHeroVsl() {
+  const player = document.querySelector("[data-vsl-player]");
+  const video = player?.querySelector("[data-vsl-video]");
+  const playButton = player?.querySelector("[data-vsl-play]");
+  const heroSection = player?.closest(".hero-section");
+
+  if (!player || !video || !playButton) return;
+
+  const sources = {
+    intro: video.dataset.introSrc,
+    vsl: video.dataset.vslSrc,
+    outro: video.dataset.outroSrc
+  };
+
+  if (!sources.intro || !sources.vsl || !sources.outro) return;
+
+  const preloaders = new Map();
+  let phase = "intro-preview";
+  let switching = false;
+
+  const setState = state => {
+    player.dataset.vslState = state;
+    player.classList.toggle("is-playing", state === "playing");
+  };
+
+  const setPhase = nextPhase => {
+    phase = nextPhase;
+    player.dataset.vslPhase = nextPhase;
+  };
+
+  const setStarted = started => {
+    player.classList.toggle("is-vsl-started", started);
+    heroSection?.classList.toggle("is-vsl-started", started);
+  };
+
+  const preloadVideo = src => {
+    if (!src || preloaders.has(src)) return;
+
+    const preloader = document.createElement("video");
+    preloader.preload = "auto";
+    preloader.muted = true;
+    preloader.playsInline = true;
+    preloader.src = src;
+    preloader.load();
+    preloaders.set(src, preloader);
+  };
+
+  const waitUntilReady = () => new Promise(resolve => {
+    if (video.readyState >= 3) {
+      resolve();
+      return;
+    }
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      video.removeEventListener("canplay", finish);
+      video.removeEventListener("error", finish);
+      resolve();
+    };
+    const timeoutId = setTimeout(finish, 2500);
+
+    video.addEventListener("canplay", finish, { once: true });
+    video.addEventListener("error", finish, { once: true });
+  });
+
+  const enableNativeFallback = error => {
+    console.warn("No se pudo continuar la secuencia del VSL:", error);
+    switching = false;
+    player.classList.remove("is-switching");
+    player.classList.add("is-native-fallback");
+    video.controls = true;
+    video.focus({ preventScroll: true });
+    setState("paused");
+  };
+
+  const playSegment = async nextPhase => {
+    switching = true;
+    setPhase(nextPhase);
+    player.classList.add("is-switching");
+    player.classList.remove("is-native-fallback", "is-complete");
+
+    video.pause();
+    video.loop = false;
+    video.muted = false;
+    video.controls = nextPhase === "vsl";
+    video.src = sources[nextPhase];
+    video.load();
+
+    if (nextPhase === "vsl") preloadVideo(sources.outro);
+
+    await waitUntilReady();
+    player.classList.remove("is-switching");
+    switching = false;
+
+    try {
+      await video.play();
+    } catch (error) {
+      enableNativeFallback(error);
+    }
+  };
+
+  video.defaultMuted = true;
+  video.muted = true;
+  video.loop = true;
+  video.controls = false;
+  setPhase("intro-preview");
+  setState("initial");
+  setStarted(false);
+  preloadVideo(sources.vsl);
+
+  video.play().catch(() => {
+    setState("initial");
+  });
+
+  playButton.addEventListener("click", async () => {
+    if (phase !== "intro-preview") return;
+
+    player.classList.remove("is-native-fallback");
+    setStarted(true);
+    setPhase("intro");
+    setState("playing");
+    video.loop = false;
+    video.muted = false;
+    video.controls = false;
+    video.currentTime = 0;
+
+    try {
+      await video.play();
+    } catch (error) {
+      enableNativeFallback(error);
+    }
+  });
+
+  video.addEventListener("play", () => {
+    player.classList.remove("is-native-fallback");
+    if (phase !== "intro-preview") setStarted(true);
+    setState("playing");
+  });
+
+  video.addEventListener("pause", () => {
+    if (!video.ended && !switching && phase !== "intro-preview") {
+      setState("paused");
+    }
+  });
+
+  video.addEventListener("ended", async () => {
+    if (phase === "intro") {
+      await playSegment("vsl");
+      return;
+    }
+
+    if (phase === "vsl") {
+      await playSegment("outro");
+      return;
+    }
+
+    if (phase === "outro") {
+      setPhase("complete");
+      setState("ended");
+      video.controls = false;
+      player.classList.add("is-complete");
+    }
+  });
+
+  video.addEventListener("error", () => {
+    if (!switching) enableNativeFallback(video.error);
+  });
+}
+
+// 11. Sistema de A/B Testing para Copywriting y Optimización de Conversión (CRO)
 function initABTesting() {
   const variants = {
     A: {
-      heroTitle: "Cómo Dominar el Crédito en EE.UU. y Construir Riqueza para tu Familia, Incluso si Tienes Deudas, Solo Usas ITIN o Empiezas de Cero",
-      heroSubtitle: "Aprende la hoja de ruta con Amanda Olmo para subir tu score FICO, borrar deudas y acceder a capital, incluso con ITIN. Clase en vivo y 100% en español.",
+      heroTitle: "Domina tu Crédito en EE.UU. y Construye Riqueza Familiar",
+      heroSubtitle: "Aprende la hoja de ruta legal con Amanda Olmo para borrar deudas, subir tu score FICO y acceder a capital. Clase en vivo · 100% en Español.",
       painTitle: "¿Te has sentido estancado o frustrado por el sistema?",
       pains: [
         {
@@ -322,8 +600,8 @@ function initABTesting() {
       ]
     },
     B: {
-      heroTitle: "La Hoja de Ruta para Dominar tu Crédito en EE.UU., Limpiar tu Buró y Subir tu Score FICO, Sin Caer en Estafas",
-      heroSubtitle: "Descubre el plan de 90 días para detener el acoso de cobradores y forzar a los burós a limpiar tu historial. Clase online gratis.",
+      heroTitle: "Sube tu Score de Crédito en EE.UU. (Incluso con ITIN o Deudas)",
+      heroSubtitle: "Descubre el plan legal de Amanda Olmo para borrar colecciones y construir un historial de +700 puntos. Clase online gratis.",
       painTitle: "¿Sufres algunas de estas trabas todos los días?",
       pains: [
         {
@@ -341,8 +619,8 @@ function initABTesting() {
       ]
     },
     C: {
-      heroTitle: "Cómo Dominar tu Crédito en EE.UU. para Hackear el Algoritmo Bancario y Acceder a Capital para tu Familia o LLC",
-      heroSubtitle: "El sistema de EE.UU. tiene reglas de juego ocultas. Conoce el método de Amanda Olmo para disputar errores y acceder a capital.",
+      heroTitle: "Cómo Dominar tu Crédito en EE.UU. para Acceder a Capital para tu Familia o LLC",
+      heroSubtitle: "Aprende a separar tus finanzas personales, disputar errores y calificar para líneas de crédito empresarial al 0%. Clase en vivo.",
       painTitle: "Las objeciones y miedos que te impiden avanzar:",
       pains: [
         {
@@ -361,11 +639,9 @@ function initABTesting() {
     }
   };
 
-  // 1. Detectar parámetro de URL para pruebas manuales (?v=A, ?v=B, ?v=C)
   const urlParams = new URLSearchParams(window.location.search);
   let selectedVariant = urlParams.get("v");
 
-  // 2. Si no es válido o no existe, verificar localStorage o elegir aleatoriamente
   if (!["A", "B", "C"].includes(selectedVariant)) {
     selectedVariant = localStorage.getItem("mandy_ab_variant");
     if (!selectedVariant) {
@@ -374,11 +650,9 @@ function initABTesting() {
       localStorage.setItem("mandy_ab_variant", selectedVariant);
     }
   } else {
-    // Si viene de URL, forzar almacenamiento
     localStorage.setItem("mandy_ab_variant", selectedVariant);
   }
 
-  // 3. Aplicar textos de la variante seleccionada
   const variant = variants[selectedVariant];
   
   const heroTitleEl = document.querySelector(".hero-title");

@@ -15,10 +15,22 @@ fotos-amanda-referencia/
 *.JPG
 *.png
 !logo.png
+!fondos-landing/
+!fondos-landing/*.jpg
 
 # Ignore video outputs
 *.mp4
+!1.mp4
+!2.mp4
+!videos/
+!videos/*.mp4
+!videos-testimonios/
+!videos-testimonios/*.mp4
+!videos-testimonios/*.webp
 
 # Ignore OS files
 .DS_Store
 Thumbs.db
+
+# Ignore local server script
+server.js

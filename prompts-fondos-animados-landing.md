@@ -11,24 +11,115 @@
 
 ---
 
-## 📂 IMÁGENES YA GENERADAS
+## ✅ PACK FINAL GENERADO E INTEGRADO
 
-Las siguientes imágenes están en la carpeta `fondos-landing/`:
+Todos los fondos finales son JPEG 16:9 de `1664 × 936 px`, sin texto ni marcas, y están en `fondos-landing/`:
 
-| Archivo | Sección | Descripción |
+| Archivo | Sección | Dirección visual |
 |---|---|---|
-| `bg_hero_aurora.png` | Hero | Aurora eléctrica con partículas cyan/doradas, centro luminoso |
-| `bg_hero_variant_b.png` | Hero (variante) | Aurora diagonal tipo cinta de seda, efecto cósmico |
-| `bg_pain_points.png` | Puntos de dolor | Atmósfera oscura con venas rojas/naranja, grilla financiera |
-| `bg_discovery.png` | Qué vas a descubrir | Rayos ascendentes, partículas doradas subiendo, malla hexagonal |
-| `bg_social_proof.png` | Prueba social | Red de constelaciones doradas, brillo cálido central, confianza |
-| `bg_faq_countdown.png` | FAQ + Countdown | Haz de luz cenital dorado, patrones circulares tipo reloj |
-| `bg_footer_legal.png` | Footer legal | Ultra-oscuro, línea horizonte cyan, minimalista |
-| `bg_thankyou_page.png` | Página /gracias | Estallido dorado ascendente, confeti dorado, celebración |
+| `bg_pain_points.jpg` | Puntos de dolor | Tensión carmesí, grilla financiera y centro oscuro |
+| `bg_discovery.jpg` | Qué vas a descubrir | Rutas ascendentes cian/doradas con zona de copy a la derecha |
+| `bg_social_proof.jpg` | Prueba social | Constelación cálida y red de confianza |
+| `bg_faq_countdown.jpg` | FAQ + Countdown | Halo temporal abstracto y spotlight dorado |
+| `bg_footer_legal.jpg` | Footer legal | Horizonte cian minimalista sobre navy profundo |
+| `bg_thankyou_page.jpg` | Página `/gracias` | Apertura celebratoria dorada con centro limpio |
+
+### Ajustes universales para animación
+
+- Image-to-video, relación `16:9`, duración `6 segundos`.
+- Movimiento bajo (`2–3/10`), cámara casi estática y loop activado si la herramienta lo permite.
+- Negative prompt común: `No text, no letters, no numbers, no logos, no people, no new objects, no scene cuts, no camera shake, no abrupt zoom, no shape morphing, no exposure flicker, no warping, no frame interpolation artifacts.`
+- Si la herramienta no crea loops nativos, unir inicio y final con crossfade de `0.5 s`.
+
+## 🖼️ PROMPTS FINALES DE GENERACIÓN Y ANIMACIÓN
+
+### 1. Puntos de dolor — `bg_pain_points.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for the pain-points section of a premium financial education landing page. Create an abstract fintech environment expressing financial pressure and controlled tension: very deep navy and near-black atmosphere, restrained crimson energy currents along the outer edges, a faint perspective data grid dissolving into haze, subtle glass layers and sparse particles. Premium cinematic abstract 3D render with volumetric depth. Keep the central 60 percent dark, calm and low-detail for white copy and three cards; place the strongest crimson energy toward the far left and lower outer edges; retain a subtle vertical motif for portrait crops. Palette: #050A13, #0A1524, deep burgundy, restrained #EF4444, tiny accents of #8FD8E8 and #D8B873. No text, letters, numbers, people, faces, logos, brands, credit cards, readable charts, UI or watermark. Avoid horror imagery, flames, literal lightning, clutter, bright center and oversaturated neon.
+```
+
+**Animación**
+
+```text
+Ultra-slow controlled ambient motion. The crimson energy currents along the outer edges pulse gently like a distant heartbeat while the perspective grid emits a faint traveling shimmer. Sparse particles drift laterally through deep navy haze. Add extremely subtle parallax depth and a nearly imperceptible forward camera drift. Preserve the dark, quiet central safe zone and the exact composition. Cinematic tension without aggression. Seamless 6-second loop, low motion, no cuts, no morphing, no flicker.
+```
+
+### 2. Descubrimientos — `bg_discovery.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for the curriculum and discovery section of a premium financial education landing page. Create elegant ascending cyan and champagne-gold pathways over a deep navy atmosphere, with sparse rising gold particles, translucent arcs and a subtle hexagonal data mesh. Premium cinematic abstract 3D render with volumetric light. Place the luminous ascending path at roughly 35 percent of the frame width, behind the left-side photo; keep the entire rightmost 50 percent dark, calm and low-detail for white website copy; retain a subtle central vertical glow for portrait crops. Palette: #050A13, #0A1524, #2E6E91, #8FD8E8, #D8B873 and #F5E6C8. No text, letters, numbers, people, faces, logos, brands, credit cards, readable charts, UI or watermark. Avoid literal staircases, arrows, trophies, clutter, bright right side and saturated neon.
+```
+
+**Animación**
+
+```text
+Gentle continuous upward motion. Gold particles rise slowly along the cyan and champagne pathways while the vertical light column breathes softly. The hexagonal mesh receives a subtle upward traveling glow and the translucent arcs shift with minimal parallax. Keep the camera almost static and preserve the dark right-side copy area. Aspirational, smooth and cinematic. Seamless 6-second loop, low motion, no cuts, no morphing, no flicker.
+```
+
+### 3. Prueba social — `bg_social_proof.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for a social-proof and testimonials section of a premium financial education landing page. Build a deep midnight navy atmosphere with a refined constellation network of small champagne-gold nodes connected by extremely thin luminous lines, soft translucent glass ribbons, faint cyan depth haze and subtle warm ripples. Premium cinematic abstract 3D render. Keep most network activity in the upper and outer thirds; preserve the central and lower 60 percent dark for a heading and three testimonial cards; leave a few warm nodes visible in the middle portrait crop. Palette: #050A13, #0A1524, #2E6E91, #8FD8E8, #D8B873 and #F5E6C8. No text, letters, numbers, people, faces, logos, brands, profile icons, readable graphs, UI or watermark. Avoid social media symbols, globes, handshakes, crowded maps and cheesy success imagery.
+```
+
+**Animación**
+
+```text
+Warm, elegant ambient motion. The constellation nodes pulse softly and a traveling wave of light moves across a few connections without changing the network structure. Translucent blue ribbons drift almost imperceptibly from left to right and the navy haze breathes gently. Keep the lower center dark and stable for testimonial cards. Seamless 6-second loop, static camera, low motion, no cuts, no morphing, no flicker.
+```
+
+### 4. FAQ y countdown — `bg_faq_countdown.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for an FAQ and countdown section of a premium financial education landing page. Create a continuous deep navy-black atmospheric field with a large translucent temporal halo made only of concentric rings and fine radial marks, no numbers and no hands; add a champagne-gold volumetric beam from the upper right, sparse dust particles and faint cyan circular geometry. Premium cinematic abstract 3D render. Keep the entire left half dark for FAQ copy and place the halo and spotlight on the right. No text, letters, numbers, people, faces, logos, brands, literal clock face, UI, rectangles, cards, panels, frames, placeholders or watermark. Avoid alarm clocks, hourglasses, clock hands, interface shapes, oversaturated neon and bright left side.
+```
+
+**Animación**
+
+```text
+Focused, controlled motion. The concentric halo rotates only a few degrees clockwise while fine radial marks shimmer in a slow wave. Dust particles float through the upper-right gold beam and the spotlight intensity breathes subtly. The left half remains dark and completely stable for FAQ copy. Camera locked off. Seamless 6-second loop, low motion, no cuts, no morphing, no flicker.
+```
+
+### 5. Footer legal — `bg_footer_legal.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for the legal footer of a premium financial education landing page. Create a near-black navy gradient with one thin cyan-blue luminous horizon across the upper third, a barely visible perspective grid disappearing into darkness below, sparse champagne-gold micro-particles and extremely subtle haze. Premium minimalist luxury fintech render with mostly dark negative space and no central object. Palette: #02060D, #050A13, #0A1524, #2E6E91 with tiny #8FD8E8 and #D8B873 highlights. No text, letters, numbers, people, faces, logos, brands, buildings, landscape silhouettes, readable grid labels, UI or watermark. Avoid sunrise, planet horizon, city skyline, bright center, dense particles and decorative clutter.
+```
+
+**Animación**
+
+```text
+Near-static professional motion. The thin cyan horizon line pulses very gently in brightness while a few gold micro-particles drift horizontally. A barely visible scan of cool light travels once across the perspective grid and dissolves. No camera movement. Preserve the ultra-dark lower half. Seamless 6-second loop, minimal motion, no cuts, no morphing, no flicker.
+```
+
+### 6. Página de gracias — `bg_thankyou_page.jpg`
+
+**Generación**
+
+```text
+Use case: stylized-concept. Asset type: cinematic 16:9 background for a registration success and thank-you page of a premium financial education brand. Create a deep navy atmosphere with a warm champagne-gold burst rising from the lower center, layered radial halos, graceful light ribbons opening upward, sparse gold particles and soft cyan side glows. Premium cinematic abstract 3D render. Keep the central 55 percent moderately dark and low-detail for a large glass card; place the brightest rays and particles around its outer perimeter and upper corners; keep the middle portrait crop celebratory. Palette: #050A13, #0A1524, #2E6E91, #8FD8E8, #D8B873 and #F5E6C8. No text, letters, numbers, people, faces, logos, brands, trophies, credit cards, UI or watermark. Avoid fireworks, balloons, gifts, excessive glitter, bright white center, oversaturated yellow and clutter.
+```
+
+**Animación**
+
+```text
+Elegant celebratory motion. Gold particles rise slowly around the outer perimeter while the cyan and champagne ribbons open upward by a few degrees. The lower-center glow expands and contracts gently without becoming brighter than the content area. Keep the central card safe zone dark and stable. Camera almost static with minimal depth parallax. Seamless 6-second loop, low motion, no cuts, no morphing, no flicker.
+```
 
 ---
 
-## 🖼️ BLOQUE 1: PROMPTS DE GENERACIÓN DE IMÁGENES
+## 🗄️ VARIANTES HISTÓRICAS DE REFERENCIA
 
 > Copia cualquier prompt y pégalo tal cual en tu generador. Para **Midjourney** agrega `--ar 16:9 --s 750 --q 2` al final. Para **Leonardo/Flux** usa "Aspect Ratio: Landscape" y "Quality: High".
 

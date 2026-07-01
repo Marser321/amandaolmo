@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>¡Registro Confirmado! — Mandy Academy</title>
-  
+
   <!-- SEO Meta Tags -->
   <meta name="robots" content="noindex, nofollow">
-  
+
   <!-- Favicon: isotipo del logo -->
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  
+
   <!-- Preconectar a Google Fonts para Optimizar Rendimiento -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
 
   <!-- Estilos Personalizados -->
   <link rel="stylesheet" href="css/styles.css">
-  
+
   <style>
     /* Estilos específicos de la página de agradecimiento */
     .thankyou-section {
@@ -30,9 +30,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 0;
+      padding: 2.5rem 0 3.5rem;
       background-image:
         linear-gradient(180deg, rgba(5, 10, 19, 0.78) 0%, rgba(2, 6, 13, 0.92) 100%),
         radial-gradient(circle at 50% 62%, rgba(216, 184, 115, 0.1) 0%, transparent 58%),
@@ -47,140 +45,239 @@
       0% { background-position: center, center, 50% 52%; }
       100% { background-position: center, center, 50% 48%; }
     }
-    
-    .thankyou-card {
-      padding: 3rem;
-      max-width: 700px;
-      width: 100%;
-      min-width: 0;
-      text-align: center;
+
+    .thankyou-shell {
+      position: relative;
+      z-index: 5;
+      width: min(1120px, 100% - 2.5rem);
+      margin-inline: auto;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    
-    .celebrate-icon {
-      font-size: 3rem;
-      color: var(--color-gold-bright);
-      animation: bounce 2s infinite;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .video-mockup {
-      width: 100%;
-      max-width: 500px;
-      aspect-ratio: 16/9;
-      background: rgba(2, 6, 13, 0.9);
-      border: 1px solid rgba(216, 184, 115, 0.22);
-      border-radius: 8px;
-      margin: 1.5rem 0;
-      position: relative;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-      box-shadow: 0 15px 30px rgba(216, 184, 115, 0.1);
+      gap: clamp(1.75rem, 4vh, 2.75rem);
     }
-    
-    .video-thumbnail {
+
+    .thankyou-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .thankyou-header img {
+      height: 46px;
+      width: auto;
+    }
+
+    .thankyou-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      grid-template-areas:
+        "intro media"
+        "step  media";
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+      row-gap: 1.75rem;
+      align-items: center;
+    }
+
+    .thankyou-intro {
+      grid-area: intro;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.1rem;
+      text-align: left;
+      align-self: end;
+    }
+
+    .thankyou-intro .hero-title {
+      font-size: clamp(2.1rem, 4.2vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .thankyou-intro .hero-subtitle {
+      max-width: 34rem;
+      font-size: 1rem;
+    }
+
+    .confirm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(48, 164, 108, 0.12);
+      border: 1px solid rgba(48, 164, 108, 0.45);
+      color: #7ee2ae;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.95rem;
+      border-radius: 999px;
+    }
+
+    .lead-name {
+      color: var(--color-gold-bright);
+    }
+
+    /* Tarjeta del siguiente paso (WhatsApp) */
+    .next-step {
+      grid-area: step;
+      align-self: start;
+      width: 100%;
+      padding: 1.75rem;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.9rem;
+      text-align: left;
+    }
+
+    .next-step h2 {
+      font-size: clamp(1.2rem, 2vw, 1.45rem);
+      color: var(--color-text-light);
+      line-height: 1.3;
+    }
+
+    .next-step .hero-subtitle {
+      font-size: 0.92rem;
+      max-width: 32rem;
+    }
+
+    .next-step .privacy-note {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .step-badge {
+      background: rgba(216, 184, 115, 0.12);
+      border: 1px solid rgba(216, 184, 115, 0.32);
+      color: var(--color-gold-bright);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: white;
+      box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+      width: 100%;
+      max-width: 420px;
+      margin-top: 0.35rem;
+    }
+
+    .whatsapp-btn:hover {
+      box-shadow: 0 15px 30px -5px rgba(37, 211, 102, 0.6), 0 0 15px rgba(216, 184, 115, 0.18);
+    }
+
+    /* Video vertical de felicitaciones */
+    .thankyou-media {
+      grid-area: media;
+      display: flex;
+      justify-content: center;
+    }
+
+    .video-frame {
+      position: relative;
+      width: min(340px, 76vw);
+      aspect-ratio: 9 / 16;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #02060d;
+      border: 1px solid rgba(216, 184, 115, 0.35);
+      box-shadow:
+        0 30px 60px -20px rgba(0, 0, 0, 0.7),
+        0 0 45px rgba(216, 184, 115, 0.12);
+      cursor: pointer;
+    }
+
+    .video-frame video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.6;
-      transition: var(--transition-smooth);
     }
-    
-    .video-mockup:hover .video-thumbnail {
-      opacity: 0.7;
-      transform: scale(1.02);
-    }
-    
-    .play-btn {
-      width: 60px;
-      height: 60px;
-      background: var(--color-gold-bright);
-      border-radius: 50%;
-      display: flex;
+
+    .sound-btn {
+      position: absolute;
+      left: 50%;
+      bottom: 1.1rem;
+      transform: translateX(-50%);
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      color: #030712;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(216, 184, 115, 0.5);
+      background: rgba(2, 6, 13, 0.72);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      color: #F5E6C8;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
       z-index: 10;
-      box-shadow: 0 0 20px rgba(216, 184, 115, 0.38);
+      animation: sound-pulse 2.4s ease-in-out infinite;
       transition: var(--transition-smooth);
     }
-    
-    .video-mockup:hover .play-btn {
-      transform: scale(1.1);
-      background: var(--color-gold);
-      box-shadow: 0 0 25px rgba(216, 184, 115, 0.58);
-      color: #06101C;
+
+    .sound-btn:hover {
+      background: rgba(216, 184, 115, 0.18);
+      border-color: var(--color-gold-bright);
+      animation-play-state: paused;
     }
 
-    /* Variante vertical (video 9:16 de felicitaciones) */
-    .video-mockup.video-vertical {
-      aspect-ratio: 9 / 16;
-      max-width: 300px;
-      margin-left: auto;
-      margin-right: auto;
+    @keyframes sound-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(216, 184, 115, 0.35); }
+      50% { box-shadow: 0 0 0 10px rgba(216, 184, 115, 0); }
     }
 
-    .video-mockup.is-playing {
+    .video-frame.sound-on {
       cursor: default;
     }
 
-    .video-mockup.is-playing .video-thumbnail {
-      opacity: 1;
-      transform: none;
-    }
-
-    .video-mockup.is-playing .play-btn {
+    .video-frame.sound-on .sound-btn {
       display: none;
     }
-    
-    .whatsapp-btn {
-      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-      color: white;
-      box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
-    }
-    
-    .whatsapp-btn:hover {
-      box-shadow: 0 15px 30px -5px rgba(37, 211, 102, 0.6), 0 0 15px rgba(216, 184, 115, 0.18);
-    }
-    
-    .step-badge {
-      background: rgba(216, 184, 115, 0.12);
-      border: 1px solid rgba(216, 184, 115, 0.32);
-      color: var(--color-gold-bright);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      text-transform: uppercase;
-      letter-spacing: 0;
-    }
-    
-    .lead-name {
-      color: var(--color-gold-bright);
-    }
 
-    @media (max-width: 600px) {
-      .thankyou-section > .container {
-        min-width: 0;
-        padding-inline: 1rem;
+    /* Responsivo: apilado y centrado en pantallas angostas */
+    @media (max-width: 920px) {
+      .thankyou-section {
+        padding: 2rem 0 2.75rem;
       }
 
-      .thankyou-card {
-        padding: 2rem 0.75rem;
+      .thankyou-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          "intro"
+          "media"
+          "step";
+        row-gap: 1.75rem;
+        justify-items: center;
       }
 
+      .thankyou-intro {
+        align-items: center;
+        text-align: center;
+        align-self: auto;
+      }
+
+      .next-step {
+        align-items: center;
+        text-align: center;
+        max-width: 560px;
+      }
+
+      .thankyou-shell {
+        width: min(1120px, 100% - 2rem);
+      }
     }
   </style>
 </head>
@@ -192,54 +289,63 @@
       <div class="aurora-glow-1"></div>
       <div class="aurora-glow-2"></div>
     </div>
-    
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-      <img src="logo.png" alt="Mandy Academy Logo" style="height: 48px; width: auto; margin-bottom: 0.5rem; z-index: 10;">
-      <div class="thankyou-card glass-card">
-        <div class="celebrate-icon">🎉</div>
-        
-        <h1 class="hero-title" id="thankyou-title" style="font-size: 2.5rem; line-height: 1.2;">
-          ¡Felicidades<span class="lead-name" id="user-name"></span>, tu registro está confirmado!
-        </h1>
-        
-        <p class="hero-subtitle" style="max-width: 600px; margin: 0 auto;">
-          Tu lugar en la Masterclass Gratuita en Vivo ya está reservado. Solo falta un paso: únete al Grupo VIP de WhatsApp para recibir los enlaces de acceso.
-        </p>
 
-        <!-- Video de felicitaciones de Amanda -->
-        <div class="video-mockup video-vertical" id="video-container">
-          <video
-            id="congrats-video"
-            class="video-thumbnail"
-            src="videos/amanda-felicidades.mp4"
-            poster="videos/amanda-felicidades-poster.jpg"
-            preload="none"
-            playsinline
-          ></video>
-          <div class="play-btn">
-            <svg style="width: 24px; height: 24px; fill: currentColor; margin-left: 4px;" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
+    <div class="thankyou-shell">
+      <header class="thankyou-header">
+        <img src="logo.png" alt="Mandy Academy Logo">
+      </header>
+
+      <div class="thankyou-grid">
+        <div class="thankyou-intro">
+          <span class="confirm-badge">🎉 Registro confirmado</span>
+
+          <h1 class="hero-title" id="thankyou-title">
+            ¡Felicidades<span class="lead-name" id="user-name"></span>, tu lugar está reservado!
+          </h1>
+
+          <p class="hero-subtitle">
+            Amanda tiene un mensaje para ti. Tu asiento en la Masterclass Gratuita en Vivo ya está confirmado — solo falta un paso para asegurar tu acceso.
+          </p>
+        </div>
+
+        <div class="thankyou-media">
+          <!-- Video de felicitaciones de Amanda (autoplay silencioso; con sonido al tocar) -->
+          <div class="video-frame" id="video-container">
+            <video
+              id="congrats-video"
+              src="videos/amanda-felicidades-auto.mp4"
+              poster="videos/amanda-felicidades-poster.jpg"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              aria-label="Mensaje de felicitaciones de Amanda Olmo"
+            ></video>
+            <button class="sound-btn" id="sound-btn" type="button">
+              <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+              Ver con sonido
+            </button>
           </div>
         </div>
-        
-        <span class="step-badge">Paso 1 y Único Imperativo</span>
-        <h3 style="font-size: 1.35rem; color: var(--color-text-light);">Únete al Grupo de WhatsApp VIP de la Clase</h3>
-        <p class="hero-subtitle" style="font-size: 0.9rem; max-width: 550px;">
-          Por ahí enviaremos la <strong>Guía de Trabajo en PDF</strong>, los recordatorios con los enlaces de acceso directo a la transmisión y material complementario para disputar tu crédito.
-        </p>
 
-        <!-- Botón de WhatsApp VIP -->
-        <a href="https://chat.whatsapp.com/Cp0mENKJ77fITnt44KFrIz?mode=gi_t" target="_blank" class="btn-primary whatsapp-btn" style="max-width: 420px; width: 100%; margin-top: 0.5rem;">
-          <!-- Icono de WhatsApp (SVG) -->
-          <svg style="width: 22px; height: 22px; fill: currentColor;" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.835-3.34c1.654.982 3.51 1.5 5.409 1.5 5.412 0 9.817-4.406 9.82-9.82.002-2.622-1.018-5.086-2.87-6.94C17.383 3.545 14.929 2.52 12.308 2.52c-5.418 0-9.822 4.405-9.825 9.822-.001 1.708.445 3.378 1.294 4.873l-.995 3.634 3.737-.981zM17.487 14.4c-.299-.149-1.778-.878-2.052-.977-.275-.1-.475-.149-.675.15-.199.299-.773.977-.948 1.176-.175.199-.349.224-.648.075-.3-.149-1.266-.466-2.41-1.487-.89-.794-1.49-1.773-1.665-2.072-.175-.3-.019-.461.13-.61.134-.133.299-.349.449-.523.149-.174.199-.299.299-.498.1-.199.05-.373-.025-.523-.075-.15-.675-1.625-.924-2.224-.244-.587-.492-.508-.675-.518-.174-.01-.373-.01-.573-.01-.2 0-.523.075-.797.373-.274.299-1.047 1.022-1.047 2.492 0 1.47 1.072 2.89 1.221 3.09.15.199 2.107 3.216 5.106 4.512.713.308 1.27.493 1.703.631.716.228 1.368.196 1.883.119.574-.085 1.778-.727 2.027-1.429.25-.702.25-1.302.175-1.429-.075-.128-.275-.202-.574-.351z"/>
-          </svg>
-          Unirme al Grupo VIP de WhatsApp
-        </a>
+        <div class="next-step glass-card">
+          <span class="step-badge">Paso 1 y único imperativo</span>
+          <h2>Únete al Grupo de WhatsApp VIP de la Clase</h2>
+          <p class="hero-subtitle">
+            Por ahí enviaremos la <strong>Guía de Trabajo en PDF</strong>, los recordatorios con los enlaces de acceso directo a la transmisión y material complementario para disputar tu crédito.
+          </p>
 
-        <div style="margin-top: 1.5rem; text-align: center;">
-          <p class="hero-subtitle" style="font-size: 0.8rem;">
+          <a href="https://chat.whatsapp.com/Cp0mENKJ77fITnt44KFrIz?mode=gi_t" target="_blank" class="btn-primary whatsapp-btn">
+            <svg style="width: 22px; height: 22px; fill: currentColor;" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.835-3.34c1.654.982 3.51 1.5 5.409 1.5 5.412 0 9.817-4.406 9.82-9.82.002-2.622-1.018-5.086-2.87-6.94C17.383 3.545 14.929 2.52 12.308 2.52c-5.418 0-9.822 4.405-9.825 9.822-.001 1.708.445 3.378 1.294 4.873l-.995 3.634 3.737-.981zM17.487 14.4c-.299-.149-1.778-.878-2.052-.977-.275-.1-.475-.149-.675.15-.199.299-.773.977-.948 1.176-.175.199-.349.224-.648.075-.3-.149-1.266-.466-2.41-1.487-.89-.794-1.49-1.773-1.665-2.072-.175-.3-.019-.461.13-.61.134-.133.299-.349.449-.523.149-.174.199-.299.299-.498.1-.199.05-.373-.025-.523-.075-.15-.675-1.625-.924-2.224-.244-.587-.492-.508-.675-.518-.174-.01-.373-.01-.573-.01-.2 0-.523.075-.797.373-.274.299-1.047 1.022-1.047 2.492 0 1.47 1.072 2.89 1.221 3.09.15.199 2.107 3.216 5.106 4.512.713.308 1.27.493 1.703.631.716.228 1.368.196 1.883.119.574-.085 1.778-.727 2.027-1.429.25-.702.25-1.302.175-1.429-.075-.128-.275-.202-.574-.351z"/>
+            </svg>
+            Unirme al Grupo VIP de WhatsApp
+          </a>
+
+          <p class="privacy-note">
             *Respetamos tu privacidad. No enviamos spam y puedes salirte del grupo cuando desees.
           </p>
         </div>
@@ -259,26 +365,45 @@
     document.addEventListener("DOMContentLoaded", () => {
       const userNameSpan = document.getElementById("user-name");
       const savedName = localStorage.getItem("mandy_lead_name");
-      
+
       if (savedName && userNameSpan) {
         const firstName = savedName.split(" ")[0];
         userNameSpan.textContent = ` ${firstName}`;
       }
 
-      const videoContainer = document.getElementById("video-container");
-      const congratsVideo = document.getElementById("congrats-video");
-      if (videoContainer && congratsVideo) {
-        let started = false;
-        videoContainer.addEventListener("click", () => {
-          if (started) return;
-          started = true;
-          videoContainer.classList.add("is-playing");
-          congratsVideo.controls = true;
-          congratsVideo.play();
-        });
-      }
-    });
+      const videoFrame = document.getElementById("video-container");
+      const video = document.getElementById("congrats-video");
+      const soundBtn = document.getElementById("sound-btn");
+      // Versión nítida (720p) que se carga recién cuando el usuario activa el sonido;
+      // el autoplay usa una versión liviana para que cargue al instante.
+      const FULL_QUALITY_SRC = "videos/amanda-felicidades.mp4";
 
+      if (!videoFrame || !video || !soundBtn) return;
+
+      // Algunos navegadores bloquean el autoplay (ahorro de energía, etc.)
+      video.play().catch(() => {});
+
+      function activateSound() {
+        if (videoFrame.classList.contains("sound-on")) return;
+        videoFrame.classList.add("sound-on");
+        video.pause();
+        video.src = FULL_QUALITY_SRC;
+        video.muted = false;
+        video.loop = false;
+        video.controls = true;
+        video.load();
+        video.play().catch(() => {});
+      }
+
+      soundBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        activateSound();
+      });
+
+      videoFrame.addEventListener("click", () => {
+        activateSound();
+      });
+    });
   </script>
 </body>
 </html>

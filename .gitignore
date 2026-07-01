@@ -2,12 +2,20 @@
 .agents/
 scratch/
 skills-lock.json
+.claude/
+**/.claude/
+
+# Local secrets
+.env
+.env.*
+!.env.example
 
 # Ignore raw/temp directories
 extracted_assets/
 fondos-landing codex/
 fotos-amanda-generadas/
 fotos-amanda-referencia/
+copys banner/
 
 # Ignore raw camera/screenshot assets in root
 *.jpeg
@@ -17,6 +25,8 @@ fotos-amanda-referencia/
 !logo.png
 !fondos-landing/
 !fondos-landing/*.jpg
+!banners/
+!banners/*.png
 
 # Ignore video outputs
 *.mp4
@@ -30,7 +40,7 @@ fotos-amanda-referencia/
 
 # Ignore OS files
 .DS_Store
+**/.DS_Store
 Thumbs.db
-
-# Ignore local server script
-server.js
+._*
+**/._*

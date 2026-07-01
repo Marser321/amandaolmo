@@ -64,62 +64,35 @@
           <div class="badge-wrapper">
             <span class="hero-badge"><span class="live-dot"></span>Masterclass Gratuita en Vivo</span>
           </div>
+          <p class="hero-event-date">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Sábado 18 de Julio · 11:00 AM
+          </p>
           <h1 class="hero-title">Domina tu Crédito en EE.UU. y Construye Riqueza Familiar</h1>
           <p class="hero-subtitle">
             Aprende la hoja de ruta legal con Amanda Olmo para borrar deudas, subir tu score FICO y acceder a capital. Clase en vivo · 100% en Español.
           </p>
         </div>
 
-        <div class="hero-visual hero-vsl-card" data-vsl-player>
-          <video
-            class="hero-vsl-video"
-            id="hero-vsl-video"
-            data-vsl-video
-            data-intro-src="1.mp4"
-            data-vsl-src="videos/vsl-masterclass.mp4"
-            data-outro-src="2.mp4"
-            src="1.mp4"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-            poster="videos/vsl-sequence-poster.webp"
-            aria-label="Masterclass de crédito de Amanda Olmo"
-          >
-            Tu navegador no puede reproducir este video.
-          </video>
-
-          <div class="hero-vsl-controls" role="group" aria-label="Controles del video">
-            <button class="hero-vsl-control" type="button" data-vsl-toggle aria-controls="hero-vsl-video" aria-label="Pausar video">
-              <span data-vsl-icon="play" hidden aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5.5v13l10-6.5z"></path>
-                </svg>
-              </span>
-              <span data-vsl-icon="pause" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 5h4v14H7zm6 0h4v14h-4z"></path>
-                </svg>
-              </span>
-            </button>
-
-            <button class="hero-vsl-control" type="button" data-vsl-sound aria-controls="hero-vsl-video" aria-label="Activar sonido" aria-pressed="false">
-              <span data-vsl-icon="muted" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11 5 6 9H2v6h4l5 4z"></path>
-                  <path d="m19 9-6 6"></path>
-                  <path d="m13 9 6 6"></path>
-                </svg>
-              </span>
-              <span data-vsl-icon="sound" hidden aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11 5 6 9H2v6h4l5 4z"></path>
-                  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
-                  <path d="M18 6a8.5 8.5 0 0 1 0 12"></path>
-                </svg>
-              </span>
-            </button>
-          </div>
+        <!-- Banner del hero (placeholder temporal). Art-direction: vertical en móvil, horizontal en escritorio. -->
+        <div class="hero-visual hero-banner">
+          <picture>
+            <source media="(max-width: 1024px)" srcset="banners/hero-mobile.png">
+            <img
+              class="hero-banner-img"
+              src="banners/hero-desktop.png"
+              alt="Masterclass de crédito con Amanda Olmo — Domina tu crédito en EE.UU."
+              width="1672"
+              height="941"
+              loading="eager"
+              fetchpriority="high"
+            >
+          </picture>
         </div>
 
         <!-- Botón de Registro Directo en Móvil (hace scroll al formulario inline de abajo) -->
@@ -141,7 +114,7 @@
         <div class="hero-form-card shell glass-card">
           <div class="core hero-form-card-inner">
             <h2 class="form-title">Asegura tu lugar gratis</h2>
-            <p class="form-subtitle">Cupos limitados para la clase en vivo. Regístrate en 10 segundos.</p>
+            <p class="form-subtitle">Clase en vivo: sábado 18 de Julio · 11:00 AM. Cupos limitados, regístrate en 10 segundos.</p>
             
             <form class="registration-form" id="hero-register-form">
               <div class="form-group">

@@ -48,6 +48,7 @@
       padding: 3rem;
       max-width: 700px;
       width: 100%;
+      min-width: 0;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -144,6 +145,174 @@
     .lead-name {
       color: var(--color-gold-bright);
     }
+
+    .booking-panel {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 1.5rem;
+      border: 1px solid rgba(143, 216, 232, 0.2);
+      border-radius: 16px;
+      background: rgba(3, 8, 18, 0.72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 40px rgba(0, 0, 0, 0.24);
+      text-align: left;
+    }
+
+    .booking-panel [hidden] {
+      display: none !important;
+    }
+
+    .booking-panel h2 {
+      margin: 0.75rem 0 0.4rem;
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      color: var(--color-text-light);
+    }
+
+    .booking-description,
+    .booking-timezone {
+      color: var(--color-text-muted);
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .booking-timezone {
+      margin-top: 0.35rem;
+      font-size: 0.78rem;
+    }
+
+    .booking-status {
+      min-height: 1.5rem;
+      margin-top: 1rem;
+      color: var(--color-cyan-neon);
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .booking-days {
+      display: flex;
+      min-width: 0;
+      max-width: 100%;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      padding-bottom: 0.35rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .booking-day,
+    .booking-slot {
+      border: 1px solid rgba(143, 216, 232, 0.24);
+      background: rgba(10, 21, 36, 0.86);
+      color: var(--color-text-light);
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .booking-day {
+      flex: 0 0 auto;
+      min-width: 98px;
+      padding: 0.75rem 0.85rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: var(--font-headings);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .booking-day span {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--color-text-muted);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .booking-day:hover,
+    .booking-slot:hover {
+      border-color: var(--color-gold);
+      transform: translateY(-1px);
+    }
+
+    .booking-day.is-selected,
+    .booking-slot.is-selected {
+      border-color: var(--color-gold-bright);
+      background: rgba(216, 184, 115, 0.14);
+      box-shadow: 0 0 18px rgba(216, 184, 115, 0.12);
+    }
+
+    .booking-slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .booking-slot {
+      padding: 0.7rem 0.8rem;
+      border-radius: 10px;
+      font-family: var(--font-headings);
+      font-weight: 700;
+    }
+
+    .booking-confirm {
+      width: 100%;
+      min-width: 0;
+      margin-top: 1rem;
+      justify-content: center;
+      padding-inline: 0.75rem;
+      white-space: normal;
+    }
+
+    .booking-confirm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .booking-success,
+    .booking-locked {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .booking-success {
+      border: 1px solid rgba(48, 164, 108, 0.45);
+      background: rgba(48, 164, 108, 0.1);
+      color: #dff8ea;
+    }
+
+    .booking-locked {
+      border: 1px solid rgba(216, 184, 115, 0.3);
+      background: rgba(216, 184, 115, 0.08);
+      color: var(--color-text-muted);
+    }
+
+    .booking-locked a {
+      color: var(--color-gold-bright);
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      .thankyou-section > .container {
+        min-width: 0;
+        padding-inline: 1rem;
+      }
+
+      .thankyou-card {
+        padding: 2rem 0.75rem;
+      }
+
+      .booking-panel {
+        padding: 1rem;
+      }
+
+      .booking-slots {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
   </style>
 </head>
 <body>
@@ -160,13 +329,34 @@
       <div class="thankyou-card glass-card">
         <div class="celebrate-icon">🎉</div>
         
-        <h1 class="hero-title" style="font-size: 2.5rem; line-height: 1.2;">
-          ¡Felicidades <span class="lead-name" id="user-name"></span>, tu cupo está reservado!
+        <h1 class="hero-title" id="thankyou-title" style="font-size: 2.5rem; line-height: 1.2;">
+          ¡Felicidades<span class="lead-name" id="user-name"></span>, tu registro está confirmado!
         </h1>
         
         <p class="hero-subtitle" style="max-width: 600px; margin: 0 auto;">
-          Tu acceso a la Masterclass Gratuita en Vivo ha sido confirmado. Para asegurar que asistas y obtengas todo el material, por favor completa el siguiente paso que es de vital importancia:
+          Ahora elige la sesión que mejor te convenga para reservar tu lugar en la Masterclass Gratuita en Vivo.
         </p>
+
+        <section class="booking-panel" id="booking-panel" aria-labelledby="booking-title">
+          <span class="step-badge">Reserva tu sesión</span>
+          <h2 id="booking-title">Elige fecha y horario</h2>
+          <p class="booking-description">Mostramos únicamente los lugares disponibles en GoHighLevel.</p>
+          <p class="booking-timezone" id="booking-timezone"></p>
+
+          <div class="booking-status" id="booking-status" role="status" aria-live="polite">Cargando sesiones disponibles…</div>
+          <div class="booking-days" id="booking-days" aria-label="Fechas disponibles"></div>
+          <div class="booking-slots" id="booking-slots" aria-label="Horarios disponibles"></div>
+
+          <button class="btn-primary booking-confirm" type="button" id="booking-confirm" disabled>
+            Confirmar mi sesión
+          </button>
+
+          <div class="booking-success" id="booking-success" role="status" aria-live="polite" hidden></div>
+          <div class="booking-locked" id="booking-locked" hidden>
+            <span id="booking-locked-message">Para reservar una sesión primero debes completar el registro. </span>
+            <a href="index.html#hero">Volver al formulario</a>
+          </div>
+        </section>
 
         <!-- Video de Instrucciones de Amanda (Mockup) -->
         <div class="video-mockup" id="video-container">
@@ -212,18 +402,17 @@
   </footer>
 
   <script>
-    // Personalizar la página de agradecimiento con el nombre del lead registrado
     document.addEventListener("DOMContentLoaded", () => {
       const userNameSpan = document.getElementById("user-name");
       const savedName = localStorage.getItem("mandy_lead_name");
       
       if (savedName && userNameSpan) {
-        // Formatear: solo primer nombre
         const firstName = savedName.split(" ")[0];
-        userNameSpan.textContent = firstName;
+        userNameSpan.textContent = ` ${firstName}`;
       }
+
+      initBookingScheduler();
       
-      // Simular reproducción del video con un alert educativo
       const videoContainer = document.getElementById("video-container");
       if (videoContainer) {
         videoContainer.addEventListener("click", () => {
@@ -231,6 +420,227 @@
         });
       }
     });
+
+    function initBookingScheduler() {
+      const token = sessionStorage.getItem("mandy_booking_token");
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Los_Angeles";
+      const status = document.getElementById("booking-status");
+      const daysContainer = document.getElementById("booking-days");
+      const slotsContainer = document.getElementById("booking-slots");
+      const confirmButton = document.getElementById("booking-confirm");
+      const successBox = document.getElementById("booking-success");
+      const lockedBox = document.getElementById("booking-locked");
+      const timezoneLabel = document.getElementById("booking-timezone");
+      const title = document.getElementById("thankyou-title");
+      let availableDays = [];
+      let selectedDate = "";
+      let selectedSlot = "";
+
+      timezoneLabel.textContent = `Horarios mostrados en ${getTimezoneName(timezone)}.`;
+
+      const savedBooking = sessionStorage.getItem("mandy_booking_start_time");
+      if (savedBooking) {
+        showSuccess(savedBooking);
+        return;
+      }
+
+      if (!token) {
+        showLocked();
+        return;
+      }
+
+      confirmButton.addEventListener("click", bookSelectedSlot);
+      loadSlots();
+
+      async function loadSlots() {
+        setStatus("Cargando sesiones disponibles…");
+        confirmButton.disabled = true;
+        daysContainer.innerHTML = "";
+        slotsContainer.innerHTML = "";
+
+        try {
+          const response = await fetch(`/api/calendar/slots?timezone=${encodeURIComponent(timezone)}`, {
+            headers: { "X-Booking-Token": token }
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            if (response.status === 401) {
+              sessionStorage.removeItem("mandy_booking_token");
+              showLocked("Tu sesión venció. Vuelve a registrarte para reservar.");
+              return;
+            }
+            throw new Error(result.message || "No pudimos consultar los horarios.");
+          }
+
+          availableDays = Array.isArray(result.days) ? result.days : [];
+          if (!availableDays.length) {
+            setStatus("Todavía no hay nuevas sesiones disponibles. Únete al grupo de WhatsApp para recibir la próxima fecha.");
+            return;
+          }
+
+          selectedDate = availableDays[0].date;
+          renderDays();
+          renderSlots();
+          setStatus("Selecciona un horario para continuar.");
+        } catch (error) {
+          setStatus(error.message || "No pudimos cargar las sesiones. Inténtalo nuevamente.", true);
+        }
+      }
+
+      function renderDays() {
+        daysContainer.innerHTML = "";
+        availableDays.forEach(day => {
+          const button = document.createElement("button");
+          const dateLabel = formatDateKey(day.date);
+          button.type = "button";
+          button.className = `booking-day${day.date === selectedDate ? " is-selected" : ""}`;
+          button.setAttribute("aria-pressed", day.date === selectedDate ? "true" : "false");
+          button.innerHTML = `${dateLabel.primary}<span>${dateLabel.secondary}</span>`;
+          button.addEventListener("click", () => {
+            selectedDate = day.date;
+            selectedSlot = "";
+            confirmButton.disabled = true;
+            renderDays();
+            renderSlots();
+            setStatus("Selecciona un horario para continuar.");
+          });
+          daysContainer.appendChild(button);
+        });
+      }
+
+      function renderSlots() {
+        slotsContainer.innerHTML = "";
+        const day = availableDays.find(item => item.date === selectedDate);
+        if (!day) return;
+
+        day.slots.forEach(slot => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `booking-slot${slot === selectedSlot ? " is-selected" : ""}`;
+          button.setAttribute("aria-pressed", slot === selectedSlot ? "true" : "false");
+          button.textContent = formatTime(slot, timezone);
+          button.addEventListener("click", () => {
+            selectedSlot = slot;
+            confirmButton.disabled = false;
+            renderSlots();
+            setStatus(`Horario seleccionado: ${formatFullDate(slot, timezone)}.`);
+          });
+          slotsContainer.appendChild(button);
+        });
+      }
+
+      async function bookSelectedSlot() {
+        if (!selectedSlot) return;
+        const originalText = confirmButton.textContent;
+        confirmButton.disabled = true;
+        confirmButton.textContent = "Confirmando…";
+        setStatus("Confirmando tu lugar en GoHighLevel…");
+
+        try {
+          const response = await fetch("/api/calendar/book", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              bookingToken: token,
+              startTime: selectedSlot,
+              timezone
+            })
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            if (response.status === 401) {
+              sessionStorage.removeItem("mandy_booking_token");
+              showLocked("Tu sesión venció. Vuelve a registrarte para reservar.");
+              return;
+            }
+            if (response.status === 409) {
+              selectedSlot = "";
+              await loadSlots();
+            }
+            throw new Error(result.message || "No pudimos confirmar el horario.");
+          }
+
+          const confirmedStart = result.appointment?.startTime || selectedSlot;
+          sessionStorage.setItem("mandy_booking_start_time", confirmedStart);
+          if (result.appointment?.id) {
+            sessionStorage.setItem("mandy_booking_appointment_id", result.appointment.id);
+          }
+          showSuccess(confirmedStart);
+        } catch (error) {
+          setStatus(error.message || "No pudimos confirmar la sesión. Inténtalo nuevamente.", true);
+          confirmButton.disabled = !selectedSlot;
+          confirmButton.textContent = originalText;
+        }
+      }
+
+      function showSuccess(startTime) {
+        daysContainer.hidden = true;
+        slotsContainer.hidden = true;
+        confirmButton.hidden = true;
+        status.hidden = true;
+        lockedBox.hidden = true;
+        successBox.hidden = false;
+        successBox.innerHTML = `<strong>¡Sesión confirmada!</strong><br>${formatFullDate(startTime, timezone)}.<br>Recibirás los detalles de acceso por email y WhatsApp.`;
+        if (title) title.textContent = "¡Tu lugar en la Masterclass está reservado!";
+      }
+
+      function showLocked(message) {
+        const lockedMessage = document.getElementById("booking-locked-message");
+        status.hidden = true;
+        daysContainer.hidden = true;
+        slotsContainer.hidden = true;
+        confirmButton.hidden = true;
+        successBox.hidden = true;
+        lockedBox.hidden = false;
+        if (message && lockedMessage) lockedMessage.textContent = `${message} `;
+      }
+
+      function setStatus(message, isError = false) {
+        status.hidden = false;
+        status.textContent = message;
+        status.style.color = isError ? "#ffb4b8" : "var(--color-cyan-neon)";
+      }
+    }
+
+    function getTimezoneName(timezone) {
+      try {
+        const parts = new Intl.DateTimeFormat("es-US", { timeZone: timezone, timeZoneName: "long" }).formatToParts(new Date());
+        return parts.find(part => part.type === "timeZoneName")?.value || timezone;
+      } catch {
+        return timezone;
+      }
+    }
+
+    function formatDateKey(dateKey) {
+      const [year, month, day] = dateKey.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day, 12));
+      const weekday = new Intl.DateTimeFormat("es-US", { timeZone: "UTC", weekday: "short" }).format(date);
+      const datePart = new Intl.DateTimeFormat("es-US", { timeZone: "UTC", day: "numeric", month: "short" }).format(date);
+      return {
+        primary: weekday.replace(".", ""),
+        secondary: datePart.replace(".", "")
+      };
+    }
+
+    function formatTime(value, timezone) {
+      return new Intl.DateTimeFormat("es-US", {
+        timeZone: timezone,
+        hour: "numeric",
+        minute: "2-digit"
+      }).format(new Date(value));
+    }
+
+    function formatFullDate(value, timezone) {
+      return new Intl.DateTimeFormat("es-US", {
+        timeZone: timezone,
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        hour: "numeric",
+        minute: "2-digit"
+      }).format(new Date(value));
+    }
+
   </script>
 </body>
 </html>

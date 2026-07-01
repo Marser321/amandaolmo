@@ -433,21 +433,19 @@ a {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
-  grid-template-areas:
-    "media copy"
-    "media form";
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
   column-gap: clamp(3rem, 6vw, 6rem);
   row-gap: 1.75rem;
   align-items: start;
 }
 
 .hero-left {
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
 .hero-right {
-  grid-area: form;
   display: flex;
   justify-content: flex-start;
   width: 100%;
@@ -463,11 +461,26 @@ a {
 }
 
 .hero-content {
-  grid-area: copy;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   max-width: 650px;
+}
+
+.hero-event-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--color-gold-bright);
+}
+
+.hero-event-date svg {
+  width: 18px;
+  height: 18px;
 }
 
 .badge-wrapper {
@@ -552,115 +565,20 @@ a {
 }
 
 .hero-visual {
-  grid-area: media;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: sticky;
-  top: 1.5rem;
+  position: relative;
   width: 100%;
-  height: auto;
-  aspect-ratio: 9 / 16;
   overflow: hidden;
   isolation: isolate;
-  align-self: start;
   border-radius: 20px;
   background: #030812;
   border: 1px solid rgba(245, 230, 200, 0.14);
   box-shadow: 0 34px 72px -34px rgba(0, 0, 0, 0.8), 0 0 46px rgba(0, 240, 255, 0.08);
 }
 
-.hero-visual::before {
-  display: none;
-}
-
-.hero-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(2, 6, 13, 0.03), transparent 68%, rgba(2, 6, 13, 0.22));
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hero-vsl-video {
-  position: relative;
-  z-index: 2;
-  height: 100%;
+.hero-banner-img {
+  display: block;
   width: 100%;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-  background: #020711;
-  transition: opacity 0.18s ease;
-}
-
-.hero-vsl-card.is-switching .hero-vsl-video {
-  opacity: 0;
-}
-
-.hero-vsl-controls {
-  position: absolute;
-  z-index: 4;
-  left: 0.85rem;
-  top: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  transform: translateY(-50%);
-}
-
-.hero-vsl-control {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  border: 1px solid rgba(245, 230, 200, 0.36);
-  border-radius: 50%;
-  background: rgba(4, 10, 20, 0.72);
-  color: #fff;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-
-.hero-vsl-control:hover {
-  border-color: var(--color-gold-bright);
-  background: rgba(4, 10, 20, 0.88);
-  transform: scale(1.06);
-}
-
-.hero-vsl-control:focus-visible {
-  outline: 2px solid var(--color-cyan-neon);
-  outline-offset: 3px;
-}
-
-.hero-vsl-control span {
-  display: grid;
-  place-items: center;
-}
-
-.hero-vsl-control [hidden] {
-  display: none;
-}
-
-.hero-vsl-control:disabled {
-  opacity: 0.55;
-  cursor: wait;
-  transform: none;
-}
-
-.hero-vsl-control svg {
-  width: 18px;
-  height: 18px;
-}
-
-.hero-vsl-card.is-autoplay-blocked [data-vsl-sound] {
-  display: none;
+  height: auto;
 }
 
 .hero-form-card {
@@ -1607,73 +1525,16 @@ section::after {
     max-width: none;
     padding: 0;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "stage"
-      "form";
     gap: 0;
   }
 
   .hero-visual {
-    grid-area: stage;
     position: relative;
-    top: auto;
     width: 100%;
-    height: calc(100svh - 40px);
-    min-height: 0;
-    aspect-ratio: auto;
     border: 0;
     border-radius: 0;
     box-shadow: none;
     background: #020711;
-  }
-
-  .hero-visual::before {
-    content: '';
-    display: block;
-    position: absolute;
-    inset: -8%;
-    z-index: 0;
-    background: url('../videos/vsl-sequence-poster.webp') center / cover no-repeat;
-    background-color: #123b70;
-    background-blend-mode: screen;
-    filter: blur(26px) saturate(1.05) brightness(0.58);
-    transform: scale(1.1);
-    pointer-events: none;
-  }
-
-  .hero-vsl-card[data-vsl-phase="vsl"]::before {
-    background-image: url('../videos/vsl-masterclass-poster.webp');
-  }
-
-  .hero-vsl-card[data-vsl-phase="outro"]::before,
-  .hero-vsl-card[data-vsl-phase="complete"]::before {
-    background-image: url('../videos/vsl-outro-poster.webp');
-  }
-
-  .hero-visual::after {
-    z-index: 3;
-    background: linear-gradient(0deg, rgba(2, 6, 13, 0.44) 0%, transparent 16%);
-  }
-
-  .hero-vsl-video {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
-    object-fit: contain;
-    box-shadow: 0 0 54px rgba(0, 0, 0, 0.5);
-  }
-
-  .hero-vsl-controls {
-    left: max(0.85rem, env(safe-area-inset-left));
-    top: auto;
-    bottom: calc(6.4rem + env(safe-area-inset-bottom));
-    flex-direction: row;
-    transform: none;
-  }
-
-  .hero-vsl-control {
-    width: 40px;
-    height: 40px;
   }
 
   .hero-content {
@@ -1698,7 +1559,6 @@ section::after {
   }
 
   .hero-right {
-    grid-area: form;
     justify-content: center;
     padding: 3rem 1.5rem calc(7.5rem + env(safe-area-inset-bottom));
     background:

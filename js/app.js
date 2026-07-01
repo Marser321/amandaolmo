@@ -5,13 +5,7 @@
 // 1. Configuración de Variables del Evento
 const CONFIG = {
   // Configura aquí la fecha de la Masterclass (Año, Mes (0-11), Día, Hora, Minutos)
-  eventDate: new Date(2026, 6, 2, 20, 0, 0), 
-  
-  // Endpoint de integración (webhook de GoHighLevel / Zapier)
-  webhookUrl: "https://services.leadconnectorhq.com/hooks/.../YOUR_WEBHOOK_ID",
-  
-  // Habilitar simulación local de base de datos
-  simulateLocalSubmit: true
+  eventDate: new Date(2026, 6, 18, 11, 0, 0)
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initModalHandler();
   initScrollToForm();
   initVideoTestimonials();
-  initHeroVsl();
 });
 
 // 2. Cuenta Regresiva (Countdown Timer)
@@ -247,35 +240,30 @@ function initFormHandler() {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
         phone: "+1" + cleanedPhone,
-        tcpa_consent: tcpaCheckbox.checked,
-        registeredAt: new Date().toISOString(),
-        source: "Landing Page Masterclass",
-        ab_variant: localStorage.getItem("mandy_ab_variant") || "A"
+        tcpaConsent: tcpaCheckbox.checked,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Los_Angeles",
+        abVariant: localStorage.getItem("mandy_ab_variant") || "A"
       };
 
       try {
-        if (CONFIG.simulateLocalSubmit) {
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          console.log("Submit Simulado Exitoso:", payload);
-          localStorage.setItem("mandy_lead_name", payload.name);
-          window.location.href = "gracias.html";
-        } else {
-          const response = await fetch(CONFIG.webhookUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
 
-          if (response.ok) {
-            localStorage.setItem("mandy_lead_name", payload.name);
-            window.location.href = "gracias.html";
-          } else {
-            throw new Error("Error en respuesta del servidor");
-          }
+        if (!response.ok || !result.bookingToken) {
+          throw new Error(result.message || "No pudimos completar tu registro.");
         }
+
+        sessionStorage.setItem("mandy_booking_token", result.bookingToken);
+        sessionStorage.setItem("mandy_booking_expires_at", result.expiresAt || "");
+        localStorage.setItem("mandy_lead_name", payload.name);
+        window.location.href = "gracias.html";
       } catch (error) {
         console.error("Error al registrar:", error);
-        alert("Hubo un inconveniente al procesar tu registro. Por favor, vuelve a intentarlo en unos instantes.");
+        alert(error.message || "Hubo un inconveniente al procesar tu registro. Por favor, vuelve a intentarlo en unos instantes.");
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
       }
@@ -400,229 +388,6 @@ function initVideoTestimonials() {
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       videos.forEach(video => video.pause());
-    }
-  });
-}
-
-// 10. VSL principal del hero
-function initHeroVsl() {
-  const player = document.querySelector("[data-vsl-player]");
-  const video = player?.querySelector("[data-vsl-video]");
-  const toggleButton = player?.querySelector("[data-vsl-toggle]");
-  const soundButton = player?.querySelector("[data-vsl-sound]");
-  const playIcon = toggleButton?.querySelector("[data-vsl-icon='play']");
-  const pauseIcon = toggleButton?.querySelector("[data-vsl-icon='pause']");
-  const mutedIcon = soundButton?.querySelector("[data-vsl-icon='muted']");
-  const soundIcon = soundButton?.querySelector("[data-vsl-icon='sound']");
-
-  if (!player || !video || !toggleButton || !soundButton) return;
-
-  const sources = {
-    intro: video.dataset.introSrc,
-    vsl: video.dataset.vslSrc,
-    outro: video.dataset.outroSrc
-  };
-
-  if (!sources.intro || !sources.vsl || !sources.outro) return;
-
-  const preloaders = new Map();
-  let phase = "intro";
-  let switching = false;
-  let pausedByVisibility = false;
-  let userMuted = true;
-
-  const setState = state => {
-    player.dataset.vslState = state;
-    player.classList.toggle("is-playing", state === "playing");
-    const isPlaying = state === "playing";
-
-    if (playIcon) playIcon.hidden = isPlaying;
-    if (pauseIcon) pauseIcon.hidden = !isPlaying;
-    toggleButton.setAttribute(
-      "aria-label",
-      isPlaying
-        ? "Pausar video"
-        : phase === "complete"
-          ? "Reproducir secuencia desde el inicio"
-          : "Reproducir video"
-    );
-  };
-
-  const setPhase = nextPhase => {
-    phase = nextPhase;
-    player.dataset.vslPhase = nextPhase;
-  };
-
-  const updateSoundControl = () => {
-    const hasSound = !video.muted;
-    if (mutedIcon) mutedIcon.hidden = hasSound;
-    if (soundIcon) soundIcon.hidden = !hasSound;
-    soundButton.setAttribute("aria-pressed", String(hasSound));
-    soundButton.setAttribute("aria-label", hasSound ? "Silenciar video" : "Activar sonido");
-  };
-
-  const preloadVideo = src => {
-    if (!src || preloaders.has(src)) return;
-
-    const preloader = document.createElement("video");
-    preloader.preload = "auto";
-    preloader.muted = true;
-    preloader.playsInline = true;
-    preloader.src = src;
-    preloader.load();
-    preloaders.set(src, preloader);
-  };
-
-  const waitUntilReady = () => new Promise(resolve => {
-    if (video.readyState >= 3) {
-      resolve();
-      return;
-    }
-
-    let settled = false;
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timeoutId);
-      video.removeEventListener("canplay", finish);
-      video.removeEventListener("error", finish);
-      resolve();
-    };
-    const timeoutId = setTimeout(finish, 2500);
-
-    video.addEventListener("canplay", finish, { once: true });
-    video.addEventListener("error", finish, { once: true });
-  });
-
-  const enableAutoplayFallback = error => {
-    if (error?.name !== "NotAllowedError") {
-      console.warn("No se pudo continuar la secuencia del VSL:", error);
-    }
-    switching = false;
-    player.classList.remove("is-switching");
-    player.classList.add("is-autoplay-blocked");
-    toggleButton.disabled = false;
-    video.controls = false;
-    setState("paused");
-  };
-
-  const playSegment = async nextPhase => {
-    switching = true;
-    setPhase(nextPhase);
-    setState("loading");
-    player.classList.add("is-switching");
-    player.classList.remove("is-autoplay-blocked", "is-complete");
-    toggleButton.disabled = true;
-
-    video.pause();
-    video.loop = false;
-    video.muted = userMuted;
-    video.controls = false;
-    video.src = sources[nextPhase];
-    video.load();
-
-    if (nextPhase === "vsl") preloadVideo(sources.outro);
-
-    await waitUntilReady();
-    player.classList.remove("is-switching");
-    switching = false;
-    toggleButton.disabled = false;
-
-    try {
-      await video.play();
-    } catch (error) {
-      enableAutoplayFallback(error);
-    }
-  };
-
-  video.defaultMuted = true;
-  video.muted = true;
-  video.loop = false;
-  video.controls = false;
-  setPhase("intro");
-  setState("initial");
-  updateSoundControl();
-  preloadVideo(sources.vsl);
-
-  video.play().catch(enableAutoplayFallback);
-
-  toggleButton.addEventListener("click", async () => {
-    if (switching) return;
-
-    if (phase === "complete") {
-      await playSegment("intro");
-      return;
-    }
-
-    if (video.paused) {
-      player.classList.remove("is-autoplay-blocked");
-      try {
-        await video.play();
-      } catch (error) {
-        enableAutoplayFallback(error);
-      }
-    } else {
-      video.pause();
-    }
-  });
-
-  soundButton.addEventListener("click", () => {
-    userMuted = !video.muted;
-    video.muted = userMuted;
-    updateSoundControl();
-  });
-
-  video.addEventListener("play", () => {
-    player.classList.remove("is-autoplay-blocked");
-    setState("playing");
-  });
-
-  video.addEventListener("pause", () => {
-    if (!video.ended && !switching) {
-      setState("paused");
-    }
-  });
-
-  video.addEventListener("ended", async () => {
-    if (phase === "intro") {
-      await playSegment("vsl");
-      return;
-    }
-
-    if (phase === "vsl") {
-      await playSegment("outro");
-      return;
-    }
-
-    if (phase === "outro") {
-      setPhase("complete");
-      setState("ended");
-      video.controls = false;
-      player.classList.add("is-complete");
-    }
-  });
-
-  video.addEventListener("error", () => {
-    if (!switching) enableAutoplayFallback(video.error);
-  });
-
-  document.addEventListener("visibilitychange", async () => {
-    if (document.hidden) {
-      pausedByVisibility = !video.paused && phase !== "complete";
-      if (pausedByVisibility) video.pause();
-      return;
-    }
-
-    if (pausedByVisibility && phase !== "complete") {
-      pausedByVisibility = false;
-      userMuted = true;
-      video.muted = true;
-      updateSoundControl();
-      try {
-        await video.play();
-      } catch (error) {
-        enableAutoplayFallback(error);
-      }
     }
   });
 }

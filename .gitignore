@@ -29,11 +29,14 @@ copys banner/
 !banners/*.png
 
 # Ignore video outputs
+*.mov
 *.mp4
 !1.mp4
 !2.mp4
 !videos/
 !videos/*.mp4
+!videos/*.jpg
+!videos/*.webp
 !videos-testimonios/
 !videos-testimonios/*.mp4
 !videos-testimonios/*.webp

@@ -79,20 +79,22 @@
           </p>
         </div>
 
-        <!-- Banner del hero (placeholder temporal). Art-direction: vertical en móvil, horizontal en escritorio. -->
+        <!-- Banner del hero: video "Timeline 1" (autoplay silenciado en bucle), integrado entre el H1 y el CTA. -->
         <div class="hero-visual hero-banner">
-          <picture>
-            <source media="(max-width: 1024px)" srcset="banners/hero-mobile.png">
-            <img
-              class="hero-banner-img"
-              src="banners/hero-desktop.png"
-              alt="Masterclass de crédito con Amanda Olmo — Domina tu crédito en EE.UU."
-              width="1672"
-              height="941"
-              loading="eager"
-              fetchpriority="high"
-            >
-          </picture>
+          <video
+            class="hero-banner-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="videos/timeline-1-poster.jpg"
+            aria-label="Banner de la Masterclass de crédito con Amanda Olmo"
+          >
+            <source src="videos/timeline-2.mp4" type="video/mp4" media="(max-width: 1024px)">
+            <source src="videos/timeline-1.mp4" type="video/mp4">
+            <img class="hero-banner-img" src="videos/timeline-1-poster.jpg" alt="Masterclass de crédito con Amanda Olmo — Domina tu crédito en EE.UU.">
+          </video>
         </div>
 
         <!-- Botón de Registro Directo en Móvil (hace scroll al formulario inline de abajo) -->

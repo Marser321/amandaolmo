@@ -18,7 +18,35 @@ document.addEventListener("DOMContentLoaded", () => {
   initModalHandler();
   initScrollToForm();
   initVideoTestimonials();
+  initHeroBannerMotion();
 });
+
+// Respeta prefers-reduced-motion en el banner de video del hero
+function initHeroBannerMotion() {
+  const video = document.querySelector(".hero-banner-video");
+  if (!video) return;
+
+  if (window.matchMedia("(max-width: 1024px)").matches) {
+    video.poster = "videos/timeline-2-poster.jpg";
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const apply = () => {
+    if (reduceMotion.matches) {
+      video.removeAttribute("autoplay");
+      video.pause();
+    } else if (video.paused) {
+      const attempt = video.play();
+      if (attempt && typeof attempt.catch === "function") {
+        attempt.catch(() => {}); // autoplay bloqueado (p. ej. iOS Low Power): se muestra el poster
+      }
+    }
+  };
+
+  apply();
+  reduceMotion.addEventListener("change", apply);
+}
 
 // 2. Cuenta Regresiva (Countdown Timer)
 function initCountdown() {

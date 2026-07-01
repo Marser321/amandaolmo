@@ -286,7 +286,7 @@ function initFormHandler() {
         }
 
         localStorage.setItem("mandy_lead_name", payload.name);
-        window.location.href = "gracias.html";
+        window.location.href = "/gracias";
       } catch (error) {
         console.error("Error al registrar:", error);
         alert(error.message || "Hubo un inconveniente al procesar tu registro. Por favor, vuelve a intentarlo en unos instantes.");

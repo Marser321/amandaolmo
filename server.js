@@ -494,12 +494,19 @@ function serveStatic(req, res, requestPath) {
     res.end();
     return;
   }
-  if (requestPath === '/') requestPath = '/index.html';
+  if (requestPath === '/') {
+    // Paridad con vercel.json: la raíz redirige a la página de registro del funnel.
+    res.writeHead(302, { Location: '/registro' });
+    res.end();
+    return;
+  }
   if (requestPath.startsWith('/.') || requestPath === '/server.js' || requestPath.startsWith('/tests/')) {
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Not Found');
     return;
   }
+  // Clean URLs (paridad con cleanUrls de Vercel): /registro → registro.html, /gracias → gracias.html.
+  if (!path.extname(requestPath)) requestPath += '.html';
 
   const filePath = path.resolve(ROOT_DIR, `.${requestPath.replace(/\//g, path.sep)}`);
   const workspaceRoot = `${path.resolve(ROOT_DIR)}${path.sep}`;

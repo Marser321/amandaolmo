@@ -81,7 +81,8 @@ function sendApiError(res, error) {
 }
 
 function getClientIp(req) {
-  return req.socket.remoteAddress || 'unknown';
+  const forwarded = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  return forwarded || req.socket?.remoteAddress || 'unknown';
 }
 
 function createRateLimiter() {
@@ -100,6 +101,19 @@ function createRateLimiter() {
 }
 
 function readJsonBody(req, maxBytes = MAX_BODY_BYTES) {
+  // En Vercel los helpers de Node ya consumieron el stream y dejan el body parseado.
+  if (req.body !== undefined) {
+    if (typeof req.body === 'string') {
+      try {
+        return Promise.resolve(req.body ? JSON.parse(req.body) : {});
+      } catch {
+        return Promise.reject(new HttpError(400, 'invalid_json', 'Los datos enviados no son válidos.'));
+      }
+    }
+    if (typeof req.body === 'object' && req.body !== null) {
+      return Promise.resolve(req.body);
+    }
+  }
   return new Promise((resolve, reject) => {
     let size = 0;
     const chunks = [];
@@ -624,5 +638,9 @@ module.exports = {
   verifyBookingToken,
   validateRegistration,
   normalizeSlots,
-  getConfig
+  getConfig,
+  handleRegister,
+  sendApiError,
+  defaultGhlRequest,
+  createRateLimiter
 };

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initABTesting(); // Inicializar sistema de A/B testing
   initCountdown();
   initStickyCTA();
+  initFormHandler();
   initFaqAccordion();
   initScrollReveal();
   initModalHandler();
@@ -116,6 +117,186 @@ function initStickyCTA() {
   });
 }
 
+// Helper para obtener o crear span de error
+function getOrCreateErrorSpan(input) {
+  let errorSpan = input.parentNode.querySelector(".error-msg");
+  if (!errorSpan) {
+    errorSpan = document.createElement("span");
+    errorSpan.className = "error-msg";
+    errorSpan.style.color = "var(--color-red-danger)";
+    errorSpan.style.fontSize = "0.75rem";
+    errorSpan.style.display = "none";
+    errorSpan.style.marginTop = "0.25rem";
+    errorSpan.style.textAlign = "left";
+    errorSpan.style.width = "100%";
+    input.parentNode.appendChild(errorSpan);
+  }
+  return errorSpan;
+}
+
+// Validar formato de email
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Lógica de Validación en Vivo
+function setupLiveValidation(form) {
+  const nameInput = form.querySelector("[name='name']");
+  const emailInput = form.querySelector("[name='email']");
+  const phoneInput = form.querySelector("[name='phone']");
+  const tcpaCheckbox = form.querySelector("[name='tcpa_consent']");
+  const submitBtn = form.querySelector("button[type='submit']");
+
+  if (!nameInput || !emailInput || !phoneInput || !tcpaCheckbox || !submitBtn) return;
+
+  const touched = { name: false, email: false, phone: false };
+
+  function checkFormValidity() {
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+    const phoneVal = phoneInput.value.replace(/\D/g, "");
+    const tcpaChecked = tcpaCheckbox.checked;
+
+    const isNameValid = nameVal.length > 0;
+    const isEmailValid = validateEmail(emailVal);
+    const isPhoneValid = phoneVal.length >= 10;
+
+    if (touched.name) {
+      const errorSpan = getOrCreateErrorSpan(nameInput);
+      errorSpan.textContent = isNameValid ? "" : "El nombre completo es requerido.";
+      errorSpan.style.display = isNameValid ? "none" : "block";
+    }
+    if (touched.email) {
+      const errorSpan = getOrCreateErrorSpan(emailInput);
+      if (!emailVal) {
+        errorSpan.textContent = "El correo electrónico es requerido.";
+        errorSpan.style.display = "block";
+      } else if (!isEmailValid) {
+        errorSpan.textContent = "Introduce un correo válido (ej. usuario@correo.com).";
+        errorSpan.style.display = "block";
+      } else {
+        errorSpan.textContent = "";
+        errorSpan.style.display = "none";
+      }
+    }
+    if (touched.phone) {
+      const errorSpan = getOrCreateErrorSpan(phoneInput);
+      if (!phoneVal) {
+        errorSpan.textContent = "El número telefónico es requerido.";
+        errorSpan.style.display = "block";
+      } else if (!isPhoneValid) {
+        errorSpan.textContent = "Introduce tu teléfono a 10 dígitos.";
+        errorSpan.style.display = "block";
+      } else {
+        errorSpan.textContent = "";
+        errorSpan.style.display = "none";
+      }
+    }
+
+    const isValid = isNameValid && isEmailValid && isPhoneValid && tcpaChecked;
+    submitBtn.disabled = !isValid;
+  }
+
+  nameInput.addEventListener("input", () => {
+    touched.name = true;
+    checkFormValidity();
+  });
+  nameInput.addEventListener("blur", () => {
+    touched.name = true;
+    checkFormValidity();
+  });
+
+  emailInput.addEventListener("input", () => {
+    touched.email = true;
+    checkFormValidity();
+  });
+  emailInput.addEventListener("blur", () => {
+    touched.email = true;
+    checkFormValidity();
+  });
+
+  phoneInput.addEventListener("input", () => {
+    touched.phone = true;
+    checkFormValidity();
+  });
+  phoneInput.addEventListener("blur", () => {
+    touched.phone = true;
+    checkFormValidity();
+  });
+
+  tcpaCheckbox.addEventListener("change", () => {
+    checkFormValidity();
+  });
+
+  // Ejecución inicial por si el navegador autocompleta
+  setTimeout(checkFormValidity, 500);
+}
+
+// 4. Envío de Formulario
+function initFormHandler() {
+  const forms = document.querySelectorAll(".registration-form");
+
+  forms.forEach(form => {
+    setupLiveValidation(form);
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const submitBtn = form.querySelector("button[type='submit']");
+      const originalBtnText = submitBtn.innerHTML;
+
+      const nameInput = form.querySelector("[name='name']");
+      const emailInput = form.querySelector("[name='email']");
+      const phoneInput = form.querySelector("[name='phone']");
+      const tcpaCheckbox = form.querySelector("[name='tcpa_consent']");
+
+      const cleanedPhone = phoneInput.value.replace(/\D/g, "");
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="btn-icon-wrapper animate-spin" style="margin: 0 auto; display: inline-block;">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+        <span>Procesando...</span>
+      `;
+
+      const payload = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        phone: "+1" + cleanedPhone,
+        tcpaConsent: tcpaCheckbox.checked,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Los_Angeles",
+        abVariant: localStorage.getItem("mandy_ab_variant") || "A"
+      };
+
+      try {
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || "No pudimos completar tu registro.");
+        }
+
+        localStorage.setItem("mandy_lead_name", payload.name);
+        window.location.href = "gracias.html";
+      } catch (error) {
+        console.error("Error al registrar:", error);
+        alert(error.message || "Hubo un inconveniente al procesar tu registro. Por favor, vuelve a intentarlo en unos instantes.");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+    });
+  });
+}
+
 // 5. FAQ Accordion
 function initFaqAccordion() {
   const accordionHeaders = document.querySelectorAll(".accordion-header");
@@ -199,12 +380,16 @@ function initModalHandler() {
 function initScrollToForm() {
   const scrollBtns = document.querySelectorAll(".scroll-to-form-btn");
   const formCard = document.querySelector(".hero-form-card");
+  const firstInput = document.getElementById("hero-name");
 
   scrollBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       if (formCard) {
         formCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (firstInput) {
+          setTimeout(() => firstInput.focus(), 600);
+        }
       }
     });
   });

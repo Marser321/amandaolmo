@@ -71,6 +71,27 @@
             </svg>
             Sábado 18 de Julio · 11:00 AM
           </p>
+          <div class="hero-countdown" aria-label="Cuenta regresiva para la masterclass">
+            <span class="hero-countdown-label">La clase empieza en</span>
+            <div class="countdown-timer hero-countdown-timer">
+              <div class="timer-block">
+                <span class="timer-num timer-days">00</span>
+                <span class="timer-label">Días</span>
+              </div>
+              <div class="timer-block">
+                <span class="timer-num timer-hours">00</span>
+                <span class="timer-label">Horas</span>
+              </div>
+              <div class="timer-block">
+                <span class="timer-num timer-minutes">00</span>
+                <span class="timer-label">Mins</span>
+              </div>
+              <div class="timer-block">
+                <span class="timer-num timer-seconds">00</span>
+                <span class="timer-label">Segs</span>
+              </div>
+            </div>
+          </div>
           <h1 class="hero-title">Aprende a Restaurar tu Crédito Tú Mismo</h1>
           <p class="hero-subtitle">
             Elimina los elementos negativos de tu reporte en los burós de crédito
@@ -80,10 +101,10 @@
         <!-- Banner del hero: imagen responsive con retrato real de Amanda. -->
         <div class="hero-visual hero-banner">
           <picture>
-            <source srcset="banners/amanda-hero-mobile.png" media="(max-width: 1024px)">
+            <source srcset="banners/amanda-header-mobile.png" media="(max-width: 1024px)">
             <img
               class="hero-banner-img"
-              src="banners/amanda-hero-desktop.png"
+              src="banners/amanda-header-desktop.png"
               alt="Amanda Olmo presentando la masterclass de restauración de crédito"
               fetchpriority="high"
               decoding="async"
@@ -218,7 +239,10 @@
     <div class="container discover-grid">
       <!-- Columna Izquierda: Visual e Impacto -->
       <div class="discover-visual" data-reveal>
-        <img src="fotos-amanda-ia/amanda_masterclass_discovery.webp" alt="Amanda Olmo preparando la clase de crédito" class="discover-visual-img" loading="lazy" decoding="async" width="1536" height="1024">
+        <picture>
+          <source srcset="banners/amanda-discovery-mobile.png" media="(max-width: 768px)">
+          <img src="banners/amanda-discovery-desktop.png" alt="Amanda Olmo preparando la clase de crédito" class="discover-visual-img" loading="lazy" decoding="async" width="1536" height="1280">
+        </picture>
         
         <!-- Dial score circular flotante -->
         <div class="discover-floating-dial animate-float">
@@ -312,7 +336,10 @@
       
       <!-- Columna Derecha: Foto CEO de Amanda -->
       <div class="bio-visual" data-reveal>
-        <img src="fotos-amanda-ia/amanda_authority_warm_navy.webp" alt="Amanda Olmo CEO" class="bio-img" loading="lazy" decoding="async" width="1774" height="887">
+        <picture>
+          <source srcset="banners/amanda-professional-mobile.png" media="(max-width: 768px)">
+          <img src="banners/amanda-professional-desktop.png" alt="Amanda Olmo CEO" class="bio-img" loading="lazy" decoding="async" width="1672" height="941">
+        </picture>
       </div>
     </div>
   </section>

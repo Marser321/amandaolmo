@@ -55,12 +55,6 @@
       <div class="orb orb-gold"></div>
     </div>
 
-    <header class="site-header">
-      <div class="logo-wrapper">
-        <img src="logo.png" alt="Mandy Academy Logo" class="site-logo">
-      </div>
-    </header>
-    
     <div class="container hero-grid">
       <!-- Columna Izquierda: Contenido + Visual -->
       <div class="hero-left">
@@ -77,28 +71,24 @@
             </svg>
             Sábado 18 de Julio · 11:00 AM
           </p>
-          <h1 class="hero-title">Domina tu Crédito en EE.UU. y Construye Riqueza Familiar</h1>
+          <h1 class="hero-title">Aprende a Restaurar tu Crédito Tú Mismo</h1>
           <p class="hero-subtitle">
-            Aprende la hoja de ruta legal con Amanda Olmo para borrar deudas, subir tu score FICO y acceder a capital. Clase en vivo · 100% en Español.
+            Elimina los elementos negativos de tu reporte en los burós de crédito
           </p>
         </div>
 
-        <!-- Banner del hero: video "Timeline 1" (autoplay silenciado en bucle), integrado entre el H1 y el CTA. -->
+        <!-- Banner del hero: imagen responsive con retrato real de Amanda. -->
         <div class="hero-visual hero-banner">
-          <video
-            class="hero-banner-video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-            poster="videos/timeline-1-poster.jpg"
-            aria-label="Banner de la Masterclass de crédito con Amanda Olmo"
-          >
-            <source src="videos/timeline-2.mp4" type="video/mp4" media="(max-width: 1024px)">
-            <source src="videos/timeline-1.mp4" type="video/mp4">
-            <img class="hero-banner-img" src="videos/timeline-1-poster.jpg" alt="Masterclass de crédito con Amanda Olmo — Domina tu crédito en EE.UU.">
-          </video>
+          <picture>
+            <source srcset="banners/amanda-hero-mobile.png" media="(max-width: 1024px)">
+            <img
+              class="hero-banner-img"
+              src="banners/amanda-hero-desktop.png"
+              alt="Amanda Olmo presentando la masterclass de restauración de crédito"
+              fetchpriority="high"
+              decoding="async"
+            >
+          </picture>
         </div>
 
         <!-- Botón de Registro Directo en Móvil (hace scroll al formulario inline de abajo) -->

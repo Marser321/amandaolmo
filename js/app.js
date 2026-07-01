@@ -424,8 +424,8 @@ function initVideoTestimonials() {
 function initABTesting() {
   const variants = {
     A: {
-      heroTitle: "Domina tu Crédito en EE.UU. y Construye Riqueza Familiar",
-      heroSubtitle: "Aprende la hoja de ruta legal con Amanda Olmo para borrar deudas, subir tu score FICO y acceder a capital. Clase en vivo · 100% en Español.",
+      heroTitle: "Aprende a Restaurar tu Crédito Tú Mismo",
+      heroSubtitle: "Elimina los elementos negativos de tu reporte en los burós de crédito",
       painTitle: "¿Te has sentido estancado o frustrado por el sistema?",
       pains: [
         {
@@ -443,8 +443,8 @@ function initABTesting() {
       ]
     },
     B: {
-      heroTitle: "Sube tu Score de Crédito en EE.UU. (Incluso con ITIN o Deudas)",
-      heroSubtitle: "Descubre el plan legal de Amanda Olmo para borrar colecciones y construir un historial de +700 puntos. Clase online gratis.",
+      heroTitle: "Aprende a Restaurar tu Crédito Tú Mismo",
+      heroSubtitle: "Elimina los elementos negativos de tu reporte en los burós de crédito",
       painTitle: "¿Sufres algunas de estas trabas todos los días?",
       pains: [
         {
@@ -462,8 +462,8 @@ function initABTesting() {
       ]
     },
     C: {
-      heroTitle: "Cómo Dominar tu Crédito en EE.UU. para Acceder a Capital para tu Familia o LLC",
-      heroSubtitle: "Aprende a separar tus finanzas personales, disputar errores y calificar para líneas de crédito empresarial al 0%. Clase en vivo.",
+      heroTitle: "Aprende a Restaurar tu Crédito Tú Mismo",
+      heroSubtitle: "Elimina los elementos negativos de tu reporte en los burós de crédito",
       painTitle: "Las objeciones y miedos que te impiden avanzar:",
       pains: [
         {

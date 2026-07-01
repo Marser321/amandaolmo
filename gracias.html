@@ -123,6 +123,27 @@
       box-shadow: 0 0 25px rgba(216, 184, 115, 0.58);
       color: #06101C;
     }
+
+    /* Variante vertical (video 9:16 de felicitaciones) */
+    .video-mockup.video-vertical {
+      aspect-ratio: 9 / 16;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .video-mockup.is-playing {
+      cursor: default;
+    }
+
+    .video-mockup.is-playing .video-thumbnail {
+      opacity: 1;
+      transform: none;
+    }
+
+    .video-mockup.is-playing .play-btn {
+      display: none;
+    }
     
     .whatsapp-btn {
       background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
@@ -185,10 +206,16 @@
           Tu lugar en la Masterclass Gratuita en Vivo ya está reservado. Solo falta un paso: únete al Grupo VIP de WhatsApp para recibir los enlaces de acceso.
         </p>
 
-        <!-- Video de Instrucciones de Amanda (Mockup) -->
-        <div class="video-mockup" id="video-container">
-          <!-- Thumbnail de Amanda presentando -->
-          <img src="fotos-amanda-ia/amanda_hero_navy_warm.webp" alt="Amanda Video" class="video-thumbnail" loading="lazy" decoding="async" width="1254" height="1254">
+        <!-- Video de felicitaciones de Amanda -->
+        <div class="video-mockup video-vertical" id="video-container">
+          <video
+            id="congrats-video"
+            class="video-thumbnail"
+            src="videos/amanda-felicidades.mp4"
+            poster="videos/amanda-felicidades-poster.jpg"
+            preload="none"
+            playsinline
+          ></video>
           <div class="play-btn">
             <svg style="width: 24px; height: 24px; fill: currentColor; margin-left: 4px;" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z"/>
@@ -239,9 +266,15 @@
       }
 
       const videoContainer = document.getElementById("video-container");
-      if (videoContainer) {
+      const congratsVideo = document.getElementById("congrats-video");
+      if (videoContainer && congratsVideo) {
+        let started = false;
         videoContainer.addEventListener("click", () => {
-          alert("🎥 Simulación de video educativo (45 segundos): Amanda dándote la bienvenida e indicándote la importancia de unirte al grupo VIP de WhatsApp para descargar tu guía de trabajo.");
+          if (started) return;
+          started = true;
+          videoContainer.classList.add("is-playing");
+          congratsVideo.controls = true;
+          congratsVideo.play();
         });
       }
     });

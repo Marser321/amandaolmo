@@ -173,7 +173,16 @@ function sanitizeTimezone(value, fallback = 'America/Los_Angeles') {
 }
 
 function normalizePhone(value) {
-  const digits = String(value || '').replace(/\D/g, '');
+  const raw = String(value || '').trim();
+  const digits = raw.replace(/\D/g, '');
+  if (raw.startsWith('+')) {
+    // Número internacional en formato E.164 (código de país + número). Soporta cualquier país.
+    if (!/^\d{8,15}$/.test(digits)) {
+      throw new HttpError(422, 'invalid_phone', 'Ingresa un número de teléfono válido con su código de país.');
+    }
+    return `+${digits}`;
+  }
+  // Sin "+": se asume EE.UU. (10 dígitos, u 11 con prefijo 1). Compatibilidad hacia atrás.
   const national = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
   if (!/^\d{10}$/.test(national)) {
     throw new HttpError(422, 'invalid_phone', 'Ingresa un número móvil válido de 10 dígitos.');
@@ -186,6 +195,7 @@ function validateRegistration(input) {
   const email = String(input.email || '').trim().toLowerCase();
   const tcpaConsent = input.tcpaConsent === true || input.tcpa_consent === true;
   const abVariant = String(input.abVariant || input.ab_variant || 'A').trim();
+  const country = String(input.country || '').trim().toUpperCase();
 
   if (name.length < 2 || name.length > 100) {
     throw new HttpError(422, 'invalid_name', 'Ingresa tu nombre completo.');
@@ -207,6 +217,7 @@ function validateRegistration(input) {
     lastName: parts.slice(1).join(' '),
     email,
     phone: normalizePhone(input.phone),
+    country: /^[A-Z]{2}$/.test(country) ? country : undefined,
     tcpaConsent,
     abVariant,
     timezone: sanitizeTimezone(input.timezone)
@@ -366,7 +377,7 @@ async function handleRegister(req, res, deps) {
       lastName: registration.lastName,
       email: registration.email,
       phone: registration.phone,
-      country: 'US',
+      country: registration.country || undefined,
       timezone: registration.timezone,
       source: 'Registro Master - Landing',
       createNewIfDuplicateAllowed: false

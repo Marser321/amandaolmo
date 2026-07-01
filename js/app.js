@@ -10,6 +10,7 @@ const CONFIG = {
 
 document.addEventListener("DOMContentLoaded", () => {
   initABTesting(); // Inicializar sistema de A/B testing
+  initCountrySelects();
   initCountdown();
   initStickyCTA();
   initFormHandler();
@@ -155,12 +156,12 @@ function setupLiveValidation(form) {
   function checkFormValidity() {
     const nameVal = nameInput.value.trim();
     const emailVal = emailInput.value.trim();
-    const phoneVal = phoneInput.value.replace(/\D/g, "");
+    const phoneVal = phoneInput.value.replace(/\D/g, "").replace(/^0+/, "");
     const tcpaChecked = tcpaCheckbox.checked;
 
     const isNameValid = nameVal.length > 0;
     const isEmailValid = validateEmail(emailVal);
-    const isPhoneValid = phoneVal.length >= 10;
+    const isPhoneValid = phoneVal.length >= 6 && phoneVal.length <= 14;
 
     if (touched.name) {
       const errorSpan = getOrCreateErrorSpan(nameInput);
@@ -186,7 +187,7 @@ function setupLiveValidation(form) {
         errorSpan.textContent = "El número telefónico es requerido.";
         errorSpan.style.display = "block";
       } else if (!isPhoneValid) {
-        errorSpan.textContent = "Introduce tu teléfono a 10 dígitos.";
+        errorSpan.textContent = "Introduce un número de teléfono válido.";
         errorSpan.style.display = "block";
       } else {
         errorSpan.textContent = "";
@@ -233,6 +234,59 @@ function setupLiveValidation(form) {
   setTimeout(checkFormValidity, 500);
 }
 
+// 3.5 Selector de código de país — permite registrar números de cualquier país.
+// EE.UU. queda por defecto; los países más usados están fijados arriba de la lista.
+const COUNTRY_CODES = [
+  { iso: "US", dial: "+1",   flag: "🇺🇸", name: "Estados Unidos" },
+  { iso: "UY", dial: "+598", flag: "🇺🇾", name: "Uruguay" },
+  { iso: "AR", dial: "+54",  flag: "🇦🇷", name: "Argentina" },
+  { iso: "MX", dial: "+52",  flag: "🇲🇽", name: "México" },
+  { iso: "CO", dial: "+57",  flag: "🇨🇴", name: "Colombia" },
+  { iso: "CL", dial: "+56",  flag: "🇨🇱", name: "Chile" },
+  { iso: "PE", dial: "+51",  flag: "🇵🇪", name: "Perú" },
+  { iso: "ES", dial: "+34",  flag: "🇪🇸", name: "España" },
+  { iso: "BO", dial: "+591", flag: "🇧🇴", name: "Bolivia" },
+  { iso: "BR", dial: "+55",  flag: "🇧🇷", name: "Brasil" },
+  { iso: "CA", dial: "+1",   flag: "🇨🇦", name: "Canadá" },
+  { iso: "CR", dial: "+506", flag: "🇨🇷", name: "Costa Rica" },
+  { iso: "CU", dial: "+53",  flag: "🇨🇺", name: "Cuba" },
+  { iso: "DO", dial: "+1",   flag: "🇩🇴", name: "Rep. Dominicana" },
+  { iso: "EC", dial: "+593", flag: "🇪🇨", name: "Ecuador" },
+  { iso: "SV", dial: "+503", flag: "🇸🇻", name: "El Salvador" },
+  { iso: "GT", dial: "+502", flag: "🇬🇹", name: "Guatemala" },
+  { iso: "HN", dial: "+504", flag: "🇭🇳", name: "Honduras" },
+  { iso: "NI", dial: "+505", flag: "🇳🇮", name: "Nicaragua" },
+  { iso: "PA", dial: "+507", flag: "🇵🇦", name: "Panamá" },
+  { iso: "PY", dial: "+595", flag: "🇵🇾", name: "Paraguay" },
+  { iso: "PR", dial: "+1",   flag: "🇵🇷", name: "Puerto Rico" },
+  { iso: "VE", dial: "+58",  flag: "🇻🇪", name: "Venezuela" },
+  { iso: "DE", dial: "+49",  flag: "🇩🇪", name: "Alemania" },
+  { iso: "AU", dial: "+61",  flag: "🇦🇺", name: "Australia" },
+  { iso: "BE", dial: "+32",  flag: "🇧🇪", name: "Bélgica" },
+  { iso: "CN", dial: "+86",  flag: "🇨🇳", name: "China" },
+  { iso: "KR", dial: "+82",  flag: "🇰🇷", name: "Corea del Sur" },
+  { iso: "FR", dial: "+33",  flag: "🇫🇷", name: "Francia" },
+  { iso: "IN", dial: "+91",  flag: "🇮🇳", name: "India" },
+  { iso: "IT", dial: "+39",  flag: "🇮🇹", name: "Italia" },
+  { iso: "JP", dial: "+81",  flag: "🇯🇵", name: "Japón" },
+  { iso: "NL", dial: "+31",  flag: "🇳🇱", name: "Países Bajos" },
+  { iso: "PT", dial: "+351", flag: "🇵🇹", name: "Portugal" },
+  { iso: "GB", dial: "+44",  flag: "🇬🇧", name: "Reino Unido" },
+  { iso: "CH", dial: "+41",  flag: "🇨🇭", name: "Suiza" }
+];
+
+function initCountrySelects() {
+  const selects = document.querySelectorAll(".country-select");
+  if (!selects.length) return;
+  const optionsHtml = COUNTRY_CODES
+    .map(c => `<option value="${c.dial}" data-iso="${c.iso}" title="${c.name}">${c.flag} ${c.dial}</option>`)
+    .join("");
+  selects.forEach(select => {
+    select.innerHTML = optionsHtml;
+    select.value = "+1"; // EE.UU. seleccionado por defecto
+  });
+}
+
 // 4. Envío de Formulario
 function initFormHandler() {
   const forms = document.querySelectorAll(".registration-form");
@@ -251,7 +305,11 @@ function initFormHandler() {
       const phoneInput = form.querySelector("[name='phone']");
       const tcpaCheckbox = form.querySelector("[name='tcpa_consent']");
 
-      const cleanedPhone = phoneInput.value.replace(/\D/g, "");
+      const countrySelect = form.querySelector(".country-select");
+      const dialCode = countrySelect ? countrySelect.value : "+1";
+      const selectedOption = countrySelect ? countrySelect.selectedOptions[0] : null;
+      const countryIso = selectedOption && selectedOption.dataset.iso ? selectedOption.dataset.iso : "US";
+      const nationalDigits = phoneInput.value.replace(/\D/g, "").replace(/^0+/, "");
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
@@ -267,7 +325,8 @@ function initFormHandler() {
       const payload = {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
-        phone: "+1" + cleanedPhone,
+        phone: dialCode + nationalDigits,
+        country: countryIso,
         tcpaConsent: tcpaCheckbox.checked,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Los_Angeles",
         abVariant: localStorage.getItem("mandy_ab_variant") || "A"

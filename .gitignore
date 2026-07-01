@@ -23,6 +23,8 @@ copys banner/
 *.JPG
 *.png
 !logo.png
+!favicon-*.png
+!apple-touch-icon.png
 !fondos-landing/
 !fondos-landing/*.jpg
 !banners/

@@ -1574,7 +1574,7 @@ section::after {
   }
 
   .hero-banner-img {
-    object-position: center 20%;
+    object-position: center top;
   }
 
   .mobile-only-cta {

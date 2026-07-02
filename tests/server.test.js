@@ -16,6 +16,7 @@ async function startTestServer(options = {}) {
       ghlToken: 'test-token',
       locationId: 'test-location',
       formId: 'test-form',
+      masterclassWorkflowId: 'test-masterclass-workflow',
       calendarId: 'test-calendar',
       amandaUserId: 'test-user',
       bookingSecret: SECRET,
@@ -74,6 +75,7 @@ test('registers a contact, adds tags and records consent without exposing contac
       calls.push({ endpoint, options });
       if (endpoint === '/contacts/upsert') return { new: true, contact: { id: 'contact-123' } };
       if (endpoint === '/contacts/contact-123/tags') return { tags: ['registro-masterclass', 'tcpa-consent-landing'] };
+      if (endpoint === '/contacts/contact-123/workflow/test-masterclass-workflow') return { workflow: { id: 'test-masterclass-workflow' } };
       if (endpoint === '/contacts/contact-123/notes') return { note: { id: 'note-123' } };
       throw new Error(`Unexpected endpoint: ${endpoint}`);
     }
@@ -101,9 +103,10 @@ test('registers a contact, adds tags and records consent without exposing contac
   assert.deepEqual(calls.map(call => call.endpoint), [
     '/contacts/upsert',
     '/contacts/contact-123/tags',
+    '/contacts/contact-123/workflow/test-masterclass-workflow',
     '/contacts/contact-123/notes'
   ]);
-  assert.match(calls[2].options.body.body, /Consentimiento TCPA: Sí/);
+  assert.match(calls[3].options.body.body, /Consentimiento TCPA: Sí/);
 });
 
 test('returns sanitized free slots for an authenticated booking session', async t => {

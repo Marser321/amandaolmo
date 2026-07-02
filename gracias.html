@@ -56,16 +56,7 @@
       flex-direction: column;
       justify-content: flex-start;
       gap: clamp(1rem, 3vh, 2rem);
-    }
-
-    .thankyou-header {
-      display: flex;
-      justify-content: center;
-    }
-
-    .thankyou-header img {
-      height: 46px;
-      width: auto;
+      align-items: center;
     }
 
     .community-cta {
@@ -74,23 +65,14 @@
       width: 100%;
     }
 
-    .thankyou-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      grid-template-areas: "intro media";
-      column-gap: clamp(2.5rem, 6vw, 5rem);
-      row-gap: 1.75rem;
-      align-items: center;
-    }
-
     .thankyou-intro {
-      grid-area: intro;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       gap: 1.1rem;
-      text-align: left;
-      align-self: start;
+      text-align: center;
+      max-width: 720px;
+      margin-inline: auto;
     }
 
     .thankyou-intro .hero-title {
@@ -99,7 +81,7 @@
     }
 
     .thankyou-intro .hero-subtitle {
-      max-width: 34rem;
+      max-width: 38rem;
       font-size: 1rem;
     }
 
@@ -120,61 +102,6 @@
 
     .lead-name {
       color: var(--color-gold-bright);
-    }
-
-    /* Tarjeta del siguiente paso (WhatsApp) */
-    .next-step {
-      grid-area: step;
-      align-self: start;
-      width: 100%;
-      padding: 1.75rem;
-      border-radius: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.9rem;
-      text-align: left;
-    }
-
-    .top-step {
-      max-width: 760px;
-      margin-inline: auto;
-      padding: clamp(1.15rem, 2.4vw, 1.55rem);
-      align-items: center;
-      text-align: center;
-    }
-
-    .top-step .hero-subtitle {
-      max-width: 46rem;
-    }
-
-    .next-step h2 {
-      font-size: clamp(1.2rem, 2vw, 1.45rem);
-      color: var(--color-text-light);
-      line-height: 1.3;
-    }
-
-    .next-step .hero-subtitle {
-      font-size: 0.92rem;
-      max-width: 32rem;
-    }
-
-    .next-step .privacy-note {
-      font-size: 0.75rem;
-      color: var(--color-text-muted);
-      margin-top: 0.25rem;
-    }
-
-    .step-badge {
-      background: rgba(216, 184, 115, 0.12);
-      border: 1px solid rgba(216, 184, 115, 0.32);
-      color: var(--color-gold-bright);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      padding: 0.3rem 0.8rem;
-      border-radius: 999px;
-      text-transform: uppercase;
     }
 
     .whatsapp-btn {
@@ -199,9 +126,9 @@
 
     /* Video vertical de felicitaciones */
     .thankyou-media {
-      grid-area: media;
       display: flex;
       justify-content: center;
+      width: 100%;
     }
 
     .video-frame {
@@ -276,27 +203,6 @@
         padding: 2rem 0 2.75rem;
       }
 
-      .thankyou-grid {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          "intro"
-          "media";
-        row-gap: 1.75rem;
-        justify-items: center;
-      }
-
-      .thankyou-intro {
-        align-items: center;
-        text-align: center;
-        align-self: auto;
-      }
-
-      .next-step {
-        align-items: center;
-        text-align: center;
-        max-width: 560px;
-      }
-
       .thankyou-shell {
         width: min(1120px, 100% - 2rem);
       }
@@ -320,9 +226,17 @@
     </div>
 
     <div class="thankyou-shell">
-      <header class="thankyou-header">
-        <img src="logo.png" alt="Mandy Academy Logo">
-      </header>
+      <div class="thankyou-intro">
+        <span class="confirm-badge">🎉 Registro confirmado</span>
+
+        <h1 class="hero-title" id="thankyou-title">
+          ¡Felicidades<span class="lead-name" id="user-name"></span>, tu lugar está reservado!
+        </h1>
+
+        <p class="hero-subtitle">
+          Tu asiento en la Masterclass Gratuita en Vivo ya está confirmado. Únete a la comunidad VIP para recibir la guía, recordatorios y el enlace directo de acceso.
+        </p>
+      </div>
 
       <div class="community-cta">
         <a href="https://chat.whatsapp.com/Cp0mENKJ77fITnt44KFrIz?mode=gi_t" target="_blank" rel="noopener noreferrer" class="btn-primary whatsapp-btn">
@@ -333,53 +247,27 @@
         </a>
       </div>
 
-      <div class="next-step top-step glass-card">
-        <span class="step-badge">Paso 1 y único imperativo</span>
-        <h2>Únete al Grupo de WhatsApp VIP de la Clase</h2>
-        <p class="hero-subtitle">
-          Por ahí enviaremos la <strong>Guía de Trabajo en PDF</strong>, los recordatorios con los enlaces de acceso directo a la transmisión y material complementario para disputar tu crédito.
-        </p>
-        <p class="privacy-note">
-          *Respetamos tu privacidad. No enviamos spam y puedes salirte del grupo cuando desees.
-        </p>
-      </div>
-
-      <div class="thankyou-grid">
-        <div class="thankyou-intro">
-          <span class="confirm-badge">🎉 Registro confirmado</span>
-
-          <h1 class="hero-title" id="thankyou-title">
-            ¡Felicidades<span class="lead-name" id="user-name"></span>, tu lugar está reservado!
-          </h1>
-
-          <p class="hero-subtitle">
-            Amanda tiene un mensaje para ti. Tu asiento en la Masterclass Gratuita en Vivo ya está confirmado — solo falta un paso para asegurar tu acceso.
-          </p>
+      <div class="thankyou-media">
+        <!-- Video de felicitaciones de Amanda (autoplay silencioso; con sonido al tocar) -->
+        <div class="video-frame" id="video-container">
+          <video
+            id="congrats-video"
+            src="videos/amanda-felicidades-auto.mp4"
+            poster="videos/amanda-felicidades-poster.jpg"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            aria-label="Mensaje de felicitaciones de Amanda Olmo"
+          ></video>
+          <button class="sound-btn" id="sound-btn" type="button">
+            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            Ver con sonido
+          </button>
         </div>
-
-        <div class="thankyou-media">
-          <!-- Video de felicitaciones de Amanda (autoplay silencioso; con sonido al tocar) -->
-          <div class="video-frame" id="video-container">
-            <video
-              id="congrats-video"
-              src="videos/amanda-felicidades-auto.mp4"
-              poster="videos/amanda-felicidades-poster.jpg"
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="auto"
-              aria-label="Mensaje de felicitaciones de Amanda Olmo"
-            ></video>
-            <button class="sound-btn" id="sound-btn" type="button">
-              <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
-                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-              </svg>
-              Ver con sonido
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>

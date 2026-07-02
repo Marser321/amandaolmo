@@ -440,13 +440,14 @@ function initScrollToForm() {
   const scrollBtns = document.querySelectorAll(".scroll-to-form-btn");
   const formCard = document.querySelector(".hero-form-card");
   const firstInput = document.getElementById("hero-name");
+  const canAutofocusForm = () => window.matchMedia("(min-width: 769px)").matches;
 
   scrollBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       if (formCard) {
         formCard.scrollIntoView({ behavior: "smooth", block: "center" });
-        if (firstInput) {
+        if (firstInput && canAutofocusForm()) {
           setTimeout(() => firstInput.focus(), 600);
         }
       }

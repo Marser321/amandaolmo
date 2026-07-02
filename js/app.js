@@ -27,9 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
 // Cuando el form dentro del iframe se envía con éxito, GHL notifica al padre
 // con un postMessage "set-sticky-contacts" que incluye el id del iframe
 // (a diferencia de la sincronización inicial, donde ese campo es un JSON).
+// Redirige al dominio conectado (página de gracias hospedada en GHL).
 function initGhlFormRedirect() {
   const GHL_ORIGIN = "https://app.amomanagements.com";
   const GHL_FORM_ID = "ZlQ8nM4O3DvqCrJLFOpR";
+  const THANK_YOU_URL = "https://site.amomanagements.com/gracias";
   let redirected = false;
 
   const isJsonString = (value) => {
@@ -47,7 +49,7 @@ function initGhlFormRedirect() {
       !isJsonString(data[2])
     ) {
       redirected = true;
-      window.location.href = "/gracias";
+      window.location.href = THANK_YOU_URL;
     }
   });
 }

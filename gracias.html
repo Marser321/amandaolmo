@@ -77,9 +77,7 @@
     .thankyou-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      grid-template-areas:
-        "intro media"
-        "step  media";
+      grid-template-areas: "intro media";
       column-gap: clamp(2.5rem, 6vw, 5rem);
       row-gap: 1.75rem;
       align-items: center;
@@ -92,7 +90,7 @@
       align-items: flex-start;
       gap: 1.1rem;
       text-align: left;
-      align-self: end;
+      align-self: start;
     }
 
     .thankyou-intro .hero-title {
@@ -136,6 +134,18 @@
       align-items: flex-start;
       gap: 0.9rem;
       text-align: left;
+    }
+
+    .top-step {
+      max-width: 760px;
+      margin-inline: auto;
+      padding: clamp(1.15rem, 2.4vw, 1.55rem);
+      align-items: center;
+      text-align: center;
+    }
+
+    .top-step .hero-subtitle {
+      max-width: 46rem;
     }
 
     .next-step h2 {
@@ -270,8 +280,7 @@
         grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
           "intro"
-          "media"
-          "step";
+          "media";
         row-gap: 1.75rem;
         justify-items: center;
       }
@@ -324,6 +333,17 @@
         </a>
       </div>
 
+      <div class="next-step top-step glass-card">
+        <span class="step-badge">Paso 1 y único imperativo</span>
+        <h2>Únete al Grupo de WhatsApp VIP de la Clase</h2>
+        <p class="hero-subtitle">
+          Por ahí enviaremos la <strong>Guía de Trabajo en PDF</strong>, los recordatorios con los enlaces de acceso directo a la transmisión y material complementario para disputar tu crédito.
+        </p>
+        <p class="privacy-note">
+          *Respetamos tu privacidad. No enviamos spam y puedes salirte del grupo cuando desees.
+        </p>
+      </div>
+
       <div class="thankyou-grid">
         <div class="thankyou-intro">
           <span class="confirm-badge">🎉 Registro confirmado</span>
@@ -360,16 +380,6 @@
           </div>
         </div>
 
-        <div class="next-step glass-card">
-          <span class="step-badge">Paso 1 y único imperativo</span>
-          <h2>Únete al Grupo de WhatsApp VIP de la Clase</h2>
-          <p class="hero-subtitle">
-            Por ahí enviaremos la <strong>Guía de Trabajo en PDF</strong>, los recordatorios con los enlaces de acceso directo a la transmisión y material complementario para disputar tu crédito.
-          </p>
-          <p class="privacy-note">
-            *Respetamos tu privacidad. No enviamos spam y puedes salirte del grupo cuando desees.
-          </p>
-        </div>
       </div>
     </div>
   </section>

@@ -49,6 +49,7 @@ function getConfig(overrides = {}) {
     ghlToken: process.env.GHL_PRIVATE_INTEGRATION_TOKEN || '',
     locationId: process.env.GHL_LOCATION_ID || '',
     formId: process.env.GHL_FORM_ID || '',
+    masterclassWorkflowId: process.env.GHL_MASTERCLASS_WORKFLOW_ID || '',
     calendarId: process.env.GHL_CALENDAR_ID || '',
     amandaUserId: process.env.GHL_AMANDA_USER_ID || '',
     bookingDurationMinutes: numberFromEnv(process.env.GHL_BOOKING_DURATION_MINUTES, 90, 15, 480),
@@ -393,6 +394,12 @@ async function handleRegister(req, res, deps) {
     version: '2023-02-21',
     body: { tags: ['registro-masterclass', 'tcpa-consent-landing'] }
   });
+  if (deps.config.masterclassWorkflowId) {
+    await deps.requestGhl(`/contacts/${encodeURIComponent(contactId)}/workflow/${encodeURIComponent(deps.config.masterclassWorkflowId)}`, {
+      method: 'POST',
+      version: '2021-07-28'
+    });
+  }
   await deps.requestGhl(`/contacts/${encodeURIComponent(contactId)}/notes`, {
     method: 'POST',
     version: '2023-02-21',

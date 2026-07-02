@@ -29,6 +29,12 @@ copys banner/
 !fondos-landing/*.jpg
 !banners/
 !banners/*.png
+!banners/campana-masterclass-2026/
+!banners/campana-masterclass-2026/*.png
+!banners/campana-masterclass-2026/*.md
+
+# Ignore packaged exports
+banners.zip
 
 # Ignore video outputs
 *.mov

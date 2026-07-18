@@ -9,17 +9,30 @@ const CONFIG = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  initABTesting(); // Inicializar sistema de A/B testing
-  initCountrySelects();
-  initCountdown();
-  initStickyCTA();
-  initFormHandler();
-  initFaqAccordion();
-  initScrollReveal();
-  initModalHandler();
-  initScrollToForm();
-  initVideoTestimonials();
-  initHeroBannerMotion();
+  // Marca que el JS está activo: el estado oculto de [data-reveal] solo aplica
+  // con esta clase presente, así el contenido nunca queda invisible sin JS.
+  document.body.classList.add("js-ready");
+  // Cada init se aísla en try/catch: si uno falla, los demás siguen corriendo
+  // (un error aquí dejaba la página entera sin revelar su contenido).
+  [
+    initABTesting, // Inicializar sistema de A/B testing
+    initCountrySelects,
+    initCountdown,
+    initStickyCTA,
+    initFormHandler,
+    initFaqAccordion,
+    initScrollReveal,
+    initModalHandler,
+    initScrollToForm,
+    initVideoTestimonials,
+    initHeroBannerMotion
+  ].forEach(init => {
+    try {
+      init();
+    } catch (error) {
+      console.error(`[init] ${init.name} falló:`, error);
+    }
+  });
 });
 
 // Respeta prefers-reduced-motion en el banner de video del hero
@@ -58,6 +71,11 @@ function initCountdown() {
 
   if (!timerDays.length) return;
 
+  // Declarado antes de updateTimer: si la fecha ya pasó, la primera llamada
+  // entra al clearInterval y con `const` posterior lanzaba un ReferenceError
+  // (TDZ) que rompía todos los inits siguientes de la página.
+  let timerInterval = null;
+
   function updateTimer() {
     const now = new Date().getTime();
     const difference = CONFIG.eventDate.getTime() - now;
@@ -73,7 +91,7 @@ function initCountdown() {
       if (countdownBoxDesc) {
         countdownBoxDesc.textContent = "¡La clase está por comenzar! Únete al grupo de WhatsApp VIP para recibir el enlace directo.";
       }
-      clearInterval(timerInterval);
+      if (timerInterval) clearInterval(timerInterval);
       return;
     }
 
@@ -91,7 +109,7 @@ function initCountdown() {
   }
 
   updateTimer();
-  const timerInterval = setInterval(updateTimer, 1000);
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 // 3. Botón Flotante Pegajoso (Sticky CTA Móvil)
@@ -406,6 +424,22 @@ function initScrollReveal() {
   });
 
   revealElements.forEach(el => observer.observe(el));
+
+  // Red de seguridad: si el observer no disparó (overlays, throttling, errores
+  // de terceros), revelamos todo lo pendiente para que el contenido jamás
+  // quede invisible. Sin transición y con estilo inline: no depende de que el
+  // navegador esté produciendo frames de animación.
+  setTimeout(() => {
+    revealElements.forEach(el => {
+      if (!el.classList.contains("revealed")) {
+        el.style.transition = "none";
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.classList.add("revealed");
+        observer.unobserve(el);
+      }
+    });
+  }, 2500);
 }
 
 // 7. Manejo del Modal de Registro (Popup)

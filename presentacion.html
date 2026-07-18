@@ -338,8 +338,8 @@
   (function() {
     'use strict';
 
-    const TOTAL_SLIDES = 42;
-    const INTERACTIVE_SLIDES = [5, 6, 27]; // slides con widgets extra
+    const TOTAL_SLIDES = 46;
+    const INTERACTIVE_SLIDES = [6, 7, 31]; // slides con widgets extra
 
     // ── Generar todas las secciones ──
     const container = document.getElementById('slidesContainer');
@@ -352,9 +352,9 @@
       section.innerHTML = `<div class="slide-bg-img" style="background-image:url('slides-img/slide-${pad}.png')"></div>`;
 
       // Widgets interactivos
-      if (i === 5) section.innerHTML += buildDreamsWidget();
-      if (i === 6) section.innerHTML += buildFicoWidget();
-      if (i === 27) section.innerHTML += buildBAWidget();
+      if (i === 6) section.innerHTML += buildDreamsWidget();
+      if (i === 7) section.innerHTML += buildFicoWidget();
+      if (i === 31) section.innerHTML += buildBAWidget();
 
       container.appendChild(section);
     }

@@ -32,6 +32,8 @@ copys banner/
 !banners/campana-masterclass-2026/
 !banners/campana-masterclass-2026/*.png
 !banners/campana-masterclass-2026/*.md
+!slides-img/
+!slides-img/*.png
 
 # Ignore packaged exports
 banners.zip
